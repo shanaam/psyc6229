@@ -2,3 +2,4 @@
 readings:  chapter 14
 
 problems:  chapter 14, problems 1, 2, 3, 6, 7, 8, 11, 13, 14, 16, 19, 21, 22, 26
+

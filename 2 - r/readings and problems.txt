@@ -4,3 +4,4 @@ readings:  chapters 2 and 3
 problems:
     chapter 2, problems 1-7
     chapter 3, problems 1-4, 6, 7, 10, 11, 12, 15
+
