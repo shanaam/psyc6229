@@ -5,3 +5,5 @@
 # ignore macOS window information
 .DS_Store
 
+# ignore R hidden files
+.R*
