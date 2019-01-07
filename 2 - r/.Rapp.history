@@ -1,0 +1,284 @@
+ls()
+data( HSP )
+ls()
+str( HSP )
+head( HSP )
+tail( HSP )
+summary( HSP )
+names( HSP )
+plot( HSP )
+table( HSP$Obs, HSP$Run )
+with( HSP, table( Obs, Run ) )
+library( lattice )
+HSP$NumYes <- round( HSP$N * HSP$p/100)
+HSP$NumNo  <- HSP$N - HSP$NumYes
+HSP <- within( HSP, NumYes <- round(N * p/100), NumNo <- N - NumYes )
+SHR1 <- subset( HSP, Obs == "SH" & Run == "R1")
+a <- with( HSP, table( Obs, Run ) )
+a
+a <- with( HSP, NumYes <- round(N * p/100), NumNo <- N - NumYes )
+a
+a <- with( HSP, NumYes <- round(N * p/100) )
+a
+a <- with( HSP, NumNo <- N - NumYes )
+a
+rm( list=ls() )
+HSP <- within( HSP, NumYes <- round(N * p/100), NumNo <- N - NumYes )
+SHR1 <- subset( HSP, Obs == "SH" & Run == "R1")
+SHR1 <- HSP[ HSP$Obs == "SH" & HSP$Run == "R1", ]
+SHR1 <- with( HSP, HSP[Obs == "SH" & Run == "R1", ])
+k <- 1:10
+df <- data.frame( x = k, y = 2*k + 1 + rnorm(length(k)) )
+k <- 1:10
+df <- data.frame( x = k, y = 2*k + 1 + rnorm(length(k)) )
+plot( df$x, df$y )
+m <- lm( y ~ x, data = df )
+print( m )
+beta <- coef( m )
+beta
+beta <- coef( m )
+print( beta )
+typeof( beta )
+names( beta )
+beta['(Intercept)']
+beta['x']
+beta[1]
+beta[2]
+k <- c(0,11)
+lines( k, beta[1] + beta[2]*k, col='red' )
+# make data frame#
+k <- 1:10#
+df <- data.frame( x = k, y = 2*k + 1 + rnorm(length(k)) )#
+#
+# show data#
+plot( df$x, df$y )#
+#
+# fit linear regression model using lm()#
+m <- lm( y ~ x, data = df )#
+print( m )#
+#
+# get coefficients from model object#
+beta <- coef( m )#
+print( beta )#
+#
+# try this#
+typeof( beta )#
+names( beta )#
+beta['(Intercept)']#
+beta['x']#
+beta[1]#
+beta[2]#
+#
+# plot regression line#
+k <- c(0,11)#
+lines( k, beta[1] + beta[2]*k, col='red' )
+cint <- confint( m )
+print( cint )
+( cint <- confint( m ) )
+source("/Users/rfm/Dropbox/Home/wip/km/kmdemo.R")
+cint <- confint( m )
+print( cint )
+( cint )
+source("/var/folders/z7/534v_q891yd105s7r7_3mq_c0000gn/T//Rtmp8yBlsG/file1fd529ada4a6")#
+unlink("/var/folders/z7/534v_q891yd105s7r7_3mq_c0000gn/T//Rtmp8yBlsG/file1fd529ada4a6")
+source("/Users/rfm/Dropbox/Home/wip/km/kmdemo.R")
+?pritnf
+?printf
+?? printf
+1:10
+1:10:2
+1:2:10
+m <- matrix( rnorm(100), nrow=20 )
+?apply
+m
+apply( m, 1, min )
+x <- 10                  # make a vector with one element
+x <- c( 1, 2, 3, 4, 5 )  # make a vector with several elements
+print( x )               # show the vector in the console
+x
+x <- 1:10                # make a vector that is a sequence of numbers
+x <- seq( 10, 20, 2 )
+x <- seq( from=10, to=20, by=2 )
+x <- seq( from=10, to=20, length.out=10 )
+?seq
+x <- rnorm( 10, mean=0, sd=1 )  # make a vector of normally distributed random numbers
+x <- rnorm( 10 )                # use default values for mean and sd
+x <- c( 'this', 'that', 'here', 'there' )  # character vector
+x <- c( TRUE, FALSE, TRUE, FALSE )         # logical vector
+typeof( x )                                # find the type of a vector
+10L
+10L + 0.5
+x <- rnorm( 10 )
+x[1]                     # get an element of a vector
+x[ c(1,3,5) ]            # get several elements of a vector
+x[ 1:5 ]                 # get a range of elements of a vector (this is itself a vector)
+x>0                      # get a vector indicating whether each element of x is greater than zero
+x[ x>0 ]                 # get a vector of the elements of x that are greater than zero
+x[1] <- 10
+x[ c(1,3,5) ] <- 10
+x
+x[ c(1,3,5) ] <- c(10,20,30)
+x
+x[ 1:5 ] <- 10
+x
+x[ x>0 ] <- 0
+x
+sum( x )                 # find the sum of all the elements in a vector
+mean( x )                # find the mean of all the elements in a vector
+sin( x )                 # find the sine of all the elements in a vector
+is.atomic( x )           # see whether x is an atomic vector ( not the same as is.vector() )
+length( x )              # find the number of elements in a vector
+x <- Inf                 # infinity, e.g., 1/0
+x <- -Inf                # negative infinity, e.g., -1/0
+x <- NaN                 # not a number, e.g., 0/0
+x <- NA                  # not available
+x <- 1:12
+m <- matrix( x, ncol=4 )  # make a 3 x 4 matrix of numbers 1 to 12 (filled in column-wise)
+x
+m
+m <- matrix( c('abc','def','ghi','jkl'), nrow=2 )  # character matrix
+m <- matrix( c(TRUE,FALSE,TRUE,FALSE), nrow=2 )    # logical matrix
+typeof( m )                                        # find the mode of a matrix
+m <- matrix( rnorm(50), nrow=10 )
+m
+dim( m )
+m[2,1]                   # get an element of m
+m[2,2:4]                 # get several elements of m
+m[2,]                    # get a row of m
+m[,2]                    # get a column of m
+m[ m>0 ]                 # get a vector of the elements of m that are greater than zero
+sum( m )                 # find the sum of all the elements in a matrix
+sin( m )                 # find the sine of all the elements in a matrix
+dim( m )                 # find the dimension of a matrix
+length( m )              # find the number of elements in a matrix
+as.vector( m )           # convert a matrix to a vector
+is.matrix( m )           # see whether m is a matrix
+x <- matrix( rnorm(9), nrow=3 )
+y <- matrix( rnorm(9), nrow=3 )
+z <- rbind( x, y )       # combine matrices vertically (appending rows)
+z
+z <- cbind( x, y )       # combine matrices horizontally (appending columns)
+z
+a <- 1:4
+b <- 11:14
+a
+b
+x <- cbind( a, b )
+x
+y <- rbind( a, b )
+x
+y
+x <- rnorm( 24 )
+a <- array( data=x, dim=c(2,3,4) )  # make a 2 x 3 x 4 array of random numbers
+a
+x <- list( a=1, initials='rfm', scores=c(10,20,30) )  # make a list
+x
+str( x )  # show contents of x
+print( x )
+str( x )
+x$a
+x$initials
+x$scores
+x$scores[2]
+x[[1]]
+x[[3]][2]
+x[[3]]
+x[[1:2]]
+x[1]
+x[1:2]
+x$a <- 2
+x$initials <- 'jfk'
+x
+is.list( x )             # see whether x is a list
+length( x )              # get the number of elements in x
+names( x )               # get a vector of the names of the elements of x
+is.atomic( names( x ) )
+x <- list( a=1, b=2 )
+is.vector( x )
+is.atomic( x )
+m <- matrix( rnorm(9), nrow=3 )
+is.vector( m )
+is.matrix( m )
+is.atomic( m )
+?is.atomic
+?is.vector
+m
+is.atomic( m )
+is.vector( m )
+l <- list( a=1, b=2 )
+l
+is.atomic( m )
+is.vector( m )
+x <- list( a=1, b=2 )
+is.vector( x )
+is.atomic( x )
+x <- list( a=1, b=2 )
+is.vector( x )
+is.atomic( x )
+x <- 1:12
+m <- matrix( x, ncol=4 )  # make a 3 x 4 matrix of numbers 1 to 12 (filled in column-wise)
+is.atomic( m )
+x <- rnorm( 24 )
+a <- array( data=x, dim=c(2,3,4) )  # make a 2 x 3 x 4 array of random numbers
+is.atomic( a )
+df <- data.frame( trial=1:5,#
+                  signal=c('a','b','b','a','b'), #
+                  response=c('a','b','a','a','a'),#
+                  rt=c(0.11,0.21,0.12,0.21,0.21) )  # make a data frame
+df$trial
+df$signal
+df$response[1:3]
+is.data.frame( df )      # see whether x is a data frame
+length( df )             # get number of columns in x
+names( df )              # get a vector of the names of the columns of df
+# create a function to calculate sine in degrees#
+sind <- function(theta)#
+	sin((pi/180) * theta)
+sind(0)#
+sind(90)
+# create a function to calculate sine in degrees (default) or radians#
+sinv <- function(theta, deg = TRUE) {#
+	if (deg) #
+		return(sin((pi/180) * theta))#
+	else#
+		return(sin(theta))#
+}
+sinv(90)
+sinv(pi/2, deg = FALSE)
+sinv(deg = FALSE, theta = pi/2)
+# create a function to calculate sine and cosine#
+sincos <- function(theta)#
+	list(sine = sin(theta), cosine = cos(theta))
+v <- sincos(0)
+v$sine
+v$cosine
+str(v)
+r <- rnorm(100)
+sumsquare <- function(x)#
+	sum((r - x)^2)
+sumsquare(0)
+sumsquare(1)
+r <- rnorm(100)
+sumsquare(0)
+sumsquare(1)
+x <- seq( 0, 2*pi, 0.1 )
+y <- sin( x )
+y <- y + rnorm( length(y), sd=0.1 )
+plot( x, y )
+plot( x, y, type='o', pch=2, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a sinusoid',
+xlim=c(-0.1,2*pi+0.1), ylim=c(-1.2,1.2), )
+z <- sin(x)
+lines( x, z, col='blue' )               # add lines connecting points
+abline( h=0 )                           # add a straight line
+curve( sin(2*x), c(0,2*pi), col='green', add=TRUE )  # plot a function
+plot( x, y, type='o', pch=2, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a sinusoid',
+xlim=c(-0.1,2*pi+0.1), ylim=c(-1.2,1.2), )
+z <- sin(x)
+lines( x, z, col='blue' )               # add lines connecting points
+abline( h=0 )                           # add a straight line
+curve( sin(2*x), c(0,2*pi), col='green', add=TRUE )  # plot a function
+r <- rnorm( 1000, mean=10, sd=3 )
+hist(r)
+r <- rnorm( 1000, mean=10, sd=3 )
+hist(r, probability=TRUE, ylim=c(0,0.15))
+curve( dnorm(x,mean=10,sd=3), c(-3,3), col='red', add=TRUE )
