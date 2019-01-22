@@ -42,7 +42,7 @@ i <- 1
 j <- 1
 k <- -1
 while ( k < 100 ) {
-	k <- i + j
+	k <- i + j  #here is where you make the next number of the sequence
 	print( k )
 	i <- j
 	j <- k
@@ -58,7 +58,7 @@ k <- -1
 repeat {
 	k <- i + j
 	if ( k >= 100 ) 
-		break
+		break # break jumps out of the end of the loop
 	print( k )
 	i <- j
 	j <- k
@@ -98,7 +98,7 @@ cat( "the number", r, "has sign", sgn, "\n" )
 # create a function to calculate the sine in degrees, using the built-in sin()
 # function that calculates the sine in radians
 sind <- function( theta )
-	sin( (pi/180) * theta )
+	sin( (pi/180) * theta ) # converting to radians for the built-in sin function
 
 sind( 0 )
 sind( 90 )

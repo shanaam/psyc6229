@@ -1,4 +1,4 @@
-# datastruc.R  data structures
+# datastruc.R  data structures (notes by Shanaa)
 
 # useful keyboard shortcuts           os x                 windows
 #   run current line or selection     command-return       control-R
@@ -30,12 +30,18 @@ x <- c( 'this', 'that', 'here', 'there' )  # character vector
 x <- c( TRUE, FALSE, TRUE, FALSE )         # logical vector
 typeof( x )                                # find the type of a vector
 
+x <- 1
+typeof( x )
+
+x <- 1L
+typeof( x )                                #this is an INTEGER!, not double
 # getting elements of vectors
 x <- rnorm( 10 )
-x[1]                     # get an element of a vector
+x[1]                     # get an element of a vector, does NOT start at 0 in R
+                         # the 1 you pass IS AN ATOMIC VECTOR (of length 1), therefore, you can pass any other vector as well!
 x[ c(1,3,5) ]            # get several elements of a vector
 x[ 1:5 ]                 # get a range of elements of a vector (this is itself a vector)
-x>0                      # get a vector indicating whether each element of x is greater than zero     
+x>0                      # get a vector indicating whether each element of x is greater than zero -- VERY SIMILAR to x + 1    
 x[ x>0 ]                 # get a vector of the elements of x that are greater than zero
 
 # setting elements of vectors
@@ -44,6 +50,8 @@ x[ c(1,3,5) ] <- 10
 x[ c(1,3,5) ] <- c(10,20,30)
 x[ 1:5 ] <- 10
 x[ x>0 ] <- 0
+
+x[ c(1,3,5,7) ] <- c(10,20)
 
 # applying functions to vectors
 sum( x )                 # find the sum of all the elements in a vector
@@ -63,19 +71,20 @@ x <- NA                  # not available, e.g., missing data
 
 # creating matrices
 x <- 1:12
-m <- matrix( x, ncol=4 )  # make a 3 x 4 matrix of numbers 1 to 12 (filled in column-wise)
+m <- matrix( x, ncol=4 )  # make a 3 x 4 matrix of numbers 1 to 12 (filled in column-wise), numbers come from the atomic vector
+# by default, R will fill in columns first! i.e. NOT how you write
 
 # non-numeric matrices
 m <- matrix( c('abc','def','ghi','jkl'), nrow=2 )  # character matrix
 m <- matrix( c(TRUE,FALSE,TRUE,FALSE), nrow=2 )    # logical matrix
-typeof( m )                                        # find the mode of a matrix
+typeof( m )                                        # find the mode of a matrix (R will automatically convert all elements to the same mode)
 
 # getting parts of matrices
 m <- matrix( rnorm(50), nrow=10 )
-m[2,1]                   # get an element of m
+m[2,1]                   # get an element of m, row 2 then column 1
 m[2,2:4]                 # get several elements of m
 m[2,]                    # get a row of m
-m[,2]                    # get a column of m
+m[,2]                    # get a column of m --> remember these are returned as an atomic vector, not a matrix
 m[ m>0 ]                 # get a vector of the elements of m that are greater than zero
 
 # applying functions to matrices
@@ -89,14 +98,14 @@ is.matrix( m )           # see whether m is a matrix
 # combining matrices
 x <- matrix( rnorm(9), nrow=3 )
 y <- matrix( rnorm(9), nrow=3 )
-z <- rbind( x, y )       # combine matrices vertically (appending rows)
-z <- cbind( x, y )       # combine matrices horizontally (appending columns)
+z <- rbind( x, y )       # combine matrices vertically (appending rows; add to the bottom)
+z <- cbind( x, y )       # combine matrices horizontally (appending columns; add to the right)
 
 # compare x and y
 a <- 1:4
 b <- 11:14
 x <- cbind( a, b )
-y <- rbind( a, b )
+y <- rbind( a, b )      # R is trying to be helpful here. BUT this can make the code a little unpredicatable so be careful.
 
 # useful fact:  a matrix is just an atomic vector with a "dim" property that specifies
 # the number of rows and columns
@@ -120,6 +129,7 @@ dim( x )
 # creating arrays
 x <- rnorm( 24 )
 a <- array( data=x, dim=c(2,3,4) )  # make a 2 x 3 x 4 array of random numbers
+a
 
 # here too, an array is just an atomic vector with a "dim" property that specifies
 # more than two dimensions, e.g., rows, columns, and slices

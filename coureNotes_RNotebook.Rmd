@@ -1,0 +1,147 @@
+---
+title: "Statistical Modeling - Notes"
+output: html_notebook
+---
+
+# 08/01/2019
+
+## Useful things to know
+
+The tests (on Tuesdays) will be on the test banks posted up to the Friday before.
+Since this course is both about programming AND probability --> There will be both written and 
+
+
+### Term project
+__To do: Send Richard a proposal for your final project__
+
+* What do I study
+* What's my data
+* What kind if analysis I want to do
+* How will i do this?
+
+To think about:
+What is some type of data analysis I would like to do in R?  
+
+* E.g. GLM applied to my research --> regression with stuff added to it
+OR write a tutorial about something, e.g. the GLM, where you teach ANOTHER 'grad student' how to do this
+
+* E.g. GLM does this, it can be useful for this type of data, here is how you do it
+
+## Probability
+
+We are __really__ bad at making decisions based on probability -- so much so that this is a field of study in itself.
+
+* the Monty Hall problem (doors, car, goat, etc.) is a good example of this; Richard used the examples of many doors and Monty revealing all but one door to show that you should always switch.
+
+* 2/3 chance that it is in one of the boxes that I __didn't__ pick. And now I have extra info (100% that it's not there). There's still a 2/3 chance that it's in the other one
+
+
+Basic R code from first lecture --> assigning variables, loops  
+CRAN is a repository of all things related to R  
+
+* If you have only one step in your for loop, while loop, if statement, etc (e.g. print (i)), you don't need 'set braces' ({}).  
+
+```{r eval=FALSE}
+for (i in 1:5)
+  print (i)
+```
+Above:  '1:5' can be any method of generating vectors  
+
+```{r eval=FALSE}
+for (i in rnorm(5))
+  print (i)
+```
+rnorm(x) gets you a vector with x number of samples from the standard normal distribution
+
+if (x) break --> breaks out of a loop when x is TRUE
+
+```{r}
+# encode the sign of a number
+r <- rnorm( 1 )
+if ( r < 0 ) {
+	sgn <- -1
+} else {
+	sgn <- 1
+}
+cat( "the number", r, "has sign", sgn, "\n" )
+```
+For the above piece of code, the else __has__ to appear on the same line as }. When R runs into a } in an if statement, it checks __that line__ for else or else if, if there is nothing there, it completes the if statement.  
+
+There are switch statements if you would have __a lot__ of if/else if statements!
+If you don't have a return argument in a function, what gets returned is the __last__ thing you calculated in the funcion.
+
+
+## Theory
+
+### Probability Space
+
+Prob. space = (Ω, E, P)
+* What we know to be true about probabilities in some situation
+* We have a __sample space__ (omega) = a list of ALL the things that can possibly happen. e.g. {1,2,3,4,5,6} for rolling a die. Each one is an 'outcome'. In some other sample space (in another model of rolling a die), we can have {1,2,3,4,5,6,side,corner,na}.  
++ It's worth thinking about what the sample space for your process is.  
+* We also have __events__ --> all possible subsets of outcomes (e.g. {1}, {2} ...{1,2} (1 __or__ 2), {1,3}... and so on.)  
++ One event has to be all possible outcomes
++ This does'nt hold when the probability space has an infinite number of possible outcomes  
+* Finally, we have a __probability measure__.  
++ a function where we give it an __event__, and it gives you a number (the probability of that event)
++ there is a P for all possibles Es
+
+__The 3 axioms of the probability measure__.
+2. P(A) >= 0
+1. P(Ω) = 1      __Ω = omega (alt+ 234)__  
+3. If A,B are disjoint (they dont have any outcomes in common; mutually exclusive) --> P(A U B) (U is union (either of them happening)) = P(A) + P(B)
++ e.g. P({1} U {5}) = P({1}) + P({5}) = 2/6  
++ note: of the events do overlap, you use the addition rule (you subtract out the P of the overlapping parts)  
+
+
+Basic facts of probability that follow from these axioms: (you can try dereiving these using just the axioms). Drawing Venn diagrams are helpful for figuring these out.  
+
+* P (not A) = 1 - P(A)
+* 0 <= P(A) <= 1
+* A subset B --> P(A) <= P(B)        __The arrow --> means 'implies' ('then'), an 'if' is implied__  
++ __This is the addition rule__  
+* P(A U B) = P(A) + P (B) - P(A ∩ B)     __∩ = intersection (alt + 239)__ 
+
+
+Other facts
+
+1. Conditional probability
+P(A|B) = P(A and B) / P(B)    __Venn diagram's overlapping part is the P(A and B) part here!__  
+$$\frac{P(A and B)}{P(B)}$$
+
+* You're shrinking Ω to B by saying "given"
+* Try this with a dice roll: What is P(even | <=3)
+
+Flipping the conditional probability gives you: P(A and B) = P(B)*P(A|B)
+* __This is the multiplication rule__  
+
+2. If 2 events are independent: P(A|B) = P(A).
+
+That is, knowing if B happened gives you no information about P(A)
+This simplifies the multiplication rule to P(A and B) = P(A) * P(B)  
+
+Note: If 2 sets are disjoint, they're definitely NOT independent. Knowing if A occured gives you A LOT of information about B. That is, if A occurs, there is no way that B also occured.
+
+Q: is even and <=3 independent? We know that it's NO. P(even) = 0.5, but if we know that it's <= 3, the P(even) changes to 1/3!  
+BUT even and <= 4 ARE independent (if you plug into the formula in 2, both sides are 0.5.
+
+
+***
+
+# 22/01/2019
+
+## Set notation
+$e_1 = \{O_1, O_2, O_3\}$  
+* the order does not matter here
+
+∩ --> closely related to AND
+U --> closely related to OR
+
+We would use AND and OR when talking about the probabilities most of the time. Because intersection and union are not really made for use in every-day language. They're kind of specifically mathematical.  
+
+
+***
+
+__Jan 22, Feb 5, Feb 12 --> IRTG during these courses__
+
+
