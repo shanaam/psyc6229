@@ -182,9 +182,10 @@ df$response[1:3]
 # applying functions to data frames
 is.list( df )            # see whether x is a list
 is.data.frame( df )      # see whether x is a data frame
-length( df )             # get number of columns in x
 names( df )              # get a vector of the names of the columns of df
-
+length( df )             # get number of columns in x
+ncol( df )               # get number of columns in x
+nrow( df )               # get number of rows in x
 
 ### miscellaneous
 
