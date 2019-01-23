@@ -22,8 +22,8 @@ x <- seq( from=10, to=20, by=2 )
 x <- seq( from=10, to=20, length.out=10 )
 ?seq
 
-x <- rnorm( 10, mean=0, sd=1 )  # make a vector of normally distributed random numbers
-x <- rnorm( 10 )                # use default values for mean and sd
+x <- rnorm( 5, mean=10, sd=2 )  # make a vector of normally distributed random numbers
+x <- rnorm( 5 )                 # use default values for mean and sd
 
 # other types of atomic vectors
 x <- c( 'this', 'that', 'here', 'there' )  # character vector
