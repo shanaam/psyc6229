@@ -122,7 +122,7 @@ x <- rnorm( 24 )
 a <- array( data=x, dim=c(2,3,4) )  # make a 2 x 3 x 4 array of random numbers
 
 # here too, an array is just an atomic vector with a "dim" property that specifies
-# more than two dimensions, e.g., rows, columns, and slices
+# two or more dimensions, e.g., rows, columns, and slices
 # 
 # review relationship between is.atomic(), is.matrix(), is.array()
 
@@ -186,6 +186,7 @@ names( df )              # get a vector of the names of the columns of df
 length( df )             # get number of columns in x
 ncol( df )               # get number of columns in x
 nrow( df )               # get number of rows in x
+
 
 ### miscellaneous
 
