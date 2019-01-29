@@ -10,6 +10,34 @@ x <- 1
 x = 1
 
 
+### if-else
+
+# check whether a random number is negative
+r <- rnorm( 1 )
+if ( r < 0 ) 
+  print("result is negative")
+
+# encode the sign of a number
+r <- rnorm( 1 )
+if ( r < 0 ) {
+  sgn <- -1
+} else {
+  sgn <- 1
+}
+cat( "the number", r, "has sign", sgn, "\n" )
+
+# encode the sign of a number and allow for zero
+r <- rnorm( 1 )
+if ( r < 0 ) {
+  sgn <- -1
+} else if ( r == 0 ) {
+  sgn <- 0
+} else {
+  sgn <- 1
+}
+cat( "the number", r, "has sign", sgn, "\n" )
+
+
 ### for loops
 
 # print numbers 1 to 10
@@ -31,7 +59,7 @@ for ( k in c( 2, 3, 5, 9, 14, 25, 30, 40 ) )
 
 # get a normally distributed random number between -2 and 2
 r <- rnorm( 1 )
-while ( r < (-2) || r > 2 )
+while ( r < (-2)  || r > 2 )
 	r <- rnorm( 1 )
 print( r )
 
@@ -65,40 +93,18 @@ repeat {
 }
 
 
-### if-else
-
-# check whether a random number is negative
-r <- rnorm( 1 )
-if ( r < 0 ) 
-	print("result is negative")
-
-# encode the sign of a number
-r <- rnorm( 1 )
-if ( r < 0 ) {
-	sgn <- -1
-} else {
-	sgn <- 1
-}
-cat( "the number", r, "has sign", sgn, "\n" )
-
-# encode the sign of a number and allow for zero
-r <- rnorm( 1 )
-if ( r < 0 ) {
-	sgn <- -1
-} else if ( r == 0 ) {
-	sgn <- 0
-} else {
-	sgn <- 1
-}
-cat( "the number", r, "has sign", sgn, "\n" )
-
-
 ### functions
 
 # create a function to calculate the sine in degrees, using the built-in sin()
 # function that calculates the sine in radians
+<<<<<<< HEAD:2 - r/basics.R
 sind <- function( theta )
 	sin( (pi/180) * theta ) # converting to radians for the built-in sin function
+=======
+sind <- function( theta ) {
+	sin( (pi/180) * theta )
+}
+>>>>>>> ba4416ee810d505969a4f664d9e4c876fd4eabf2:02 - r/basics.R
 
 sind( 0 )
 sind( 90 )

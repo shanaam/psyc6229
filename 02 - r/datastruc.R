@@ -22,8 +22,8 @@ x <- seq( from=10, to=20, by=2 )
 x <- seq( from=10, to=20, length.out=10 )
 ?seq
 
-x <- rnorm( 10, mean=0, sd=1 )  # make a vector of normally distributed random numbers
-x <- rnorm( 10 )                # use default values for mean and sd
+x <- rnorm( 5, mean=10, sd=2 )  # make a vector of normally distributed random numbers
+x <- rnorm( 5 )                 # use default values for mean and sd
 
 # other types of atomic vectors
 x <- c( 'this', 'that', 'here', 'there' )  # character vector
@@ -132,7 +132,7 @@ a <- array( data=x, dim=c(2,3,4) )  # make a 2 x 3 x 4 array of random numbers
 a
 
 # here too, an array is just an atomic vector with a "dim" property that specifies
-# more than two dimensions, e.g., rows, columns, and slices
+# two or more dimensions, e.g., rows, columns, and slices
 # 
 # review relationship between is.atomic(), is.matrix(), is.array()
 
@@ -192,8 +192,10 @@ df$response[1:3]
 # applying functions to data frames
 is.list( df )            # see whether x is a list
 is.data.frame( df )      # see whether x is a data frame
-length( df )             # get number of columns in x
 names( df )              # get a vector of the names of the columns of df
+length( df )             # get number of columns in x
+ncol( df )               # get number of columns in x
+nrow( df )               # get number of rows in x
 
 
 ### miscellaneous
