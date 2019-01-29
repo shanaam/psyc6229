@@ -264,15 +264,15 @@ sumsquare(1)
 ### plots
 
 # make some data
-x <- seq( 0, 2*pi, by=0.1 )
-y <- sin( x )
-y <- y + rnorm( length(y), sd=0.1 )
+u <- seq( 0, 2*pi, by=0.1 )
+v <- sin( u )
+v <- v + rnorm( length(v), sd=0.1 )
 
 # basic plot
-plot( x, y )
+plot( u, v )
 
 # plot with some options
-plot( x, y, type='o', pch=2, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a sinusoid',
+plot( u, v, type='o', pch=2, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a sinusoid',
 	xlim=c(-0.1,2*pi+0.1), ylim=c(-1.2,1.2) )
 # type = points (p), lines (l), both (b), overlay (o), etc.
 # pch  = point character (circle, square, etc.), a code 1-25
@@ -285,8 +285,8 @@ plot( x, y, type='o', pch=2, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a 
 # ylim = limits of y axis
 
 # add to an existing plot
-z <- sin(x)
-lines( x, z, col='blue' )               # add lines connecting points
+z <- sin(u)
+lines( u, z, col='blue' )               # add lines connecting points
 abline( h=0 )                           # add a straight line
 curve( sin(2*x), c(0,2*pi), col='green', add=TRUE )  # plot a function
 
