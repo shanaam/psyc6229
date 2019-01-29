@@ -1,7 +1,7 @@
 # datastruc.R  data structures (notes by Shanaa)
 
 # useful keyboard shortcuts           os x                 windows
-#   run current line or selection     command-return       control-R
+#   run current line or selection     command-return       control-ENTER
 #   run whole script (.R file)        command-E
 #   halt a script                     control-C
 #   clear console                     command-option-L     control-L
@@ -158,7 +158,7 @@ a
 ### list:  1D sequence of elements, not necessarily all of the same type
 
 # creating lists
-x <- list( a=1, initials='rfm', scores=c(10,20,30) )  # make a list
+x <- list( a=1, initials='rfm', scores=c(10,20,30) )  # make a list (like a dictionary in python)
 str( x )  # show contents of x
 
 # getting elements of lists
@@ -167,10 +167,10 @@ x$initials
 x$scores
 x$scores[2]
 
-# subscripts to get elements of a list
+# subscripts to get elements of a list. Useful when list elements are not clearly names or you have lots of them
 x[[1]]
 x[[3]][2]
-# x[[1:2]]  # error; why?
+# x[[1:2]]  # error; why? ANS: it tries to return a vector. BUT 2 elements of a list can be different data types! So it has no way of making a vector with the 2 elements.
 
 # subscripts to get a sublist
 x[1]
@@ -183,12 +183,12 @@ x$initials <- 'jfk'
 # applying functions to lists
 is.list( x )             # see whether x is a list
 length( x )              # get the number of elements in x
-names( x )               # get a vector of the names of the elements of x
+names( x )               # get a vector (strings) of the names of the elements of x
 
 # note:  lists are vectors, but not atomic vectors!
 x <- list( a=1, b=2 )
-is.vector( x )
-is.atomic( x )
+is.vector( x ) # true, dim(x) == NULL
+is.atomic( x ) # false
 # although we usually call the atomic vectors that we examined in the first section
 # "vectors" for short, sometimes it's important to know that, strictly speaking,
 # a vector can be an atomic vector or a list
@@ -201,6 +201,8 @@ df <- data.frame( trial=1:5,
                   signal=c('a','b','b','a','b'), 
                   response=c('a','b','a','a','a'),
                   rt=c(0.11,0.21,0.12,0.21,0.21) )  # make a data frame
+# its's basically a list with a bunch of atomic vectors that are all the same lengths AND THIS IS ENFORCED! 
+
 
 # getting parts of data frames
 df$trial
@@ -208,8 +210,8 @@ df$signal
 df$response[1:3]
 
 # applying functions to data frames
-is.list( df )            # see whether x is a list
-is.data.frame( df )      # see whether x is a data frame
+is.list( df )            # TRUE see whether x is a list 
+is.data.frame( df )      # TRUE see whether x is a data frame
 names( df )              # get a vector of the names of the columns of df
 length( df )             # get number of columns in x
 ncol( df )               # get number of columns in x
@@ -221,7 +223,8 @@ nrow( df )               # get number of rows in x
 help.start()                   # open help homepage
 
 getwd()                        # get working directory
-setwd( '/Users/rfm/Desktop' )  # set working directory
+# setwd( '/Users/rfm/Desktop' )  # set working directory
+# setwd( '..' )
 
 ls()                           # list all variables
 rm( x )                        # remove variable x
@@ -231,7 +234,7 @@ x <- 1
 y <- 2
 save( x, y, file='datafile.Rdata' )  # save variables
 load( 'datafile.Rdata' )             # load variables
-unlink( 'datafile.Rdata' )           # delete a file
+unlink( 'datafile.Rdata' )           # delete a file (be careful with this, no undo)
 
 
 ### functions
@@ -258,6 +261,7 @@ sinv(deg = FALSE, theta = pi/2)  # order of arguments doesn't matter if we use a
 # create a function to calculate sine and cosine
 sincos <- function(theta)
 	list(sine = sin(theta), cosine = cos(theta))
+# R can't return 2 things, so we return a list of length 2 instead
 
 v <- sincos(0)
 v$sine
@@ -283,13 +287,13 @@ sumsquare(1)
 # make some data
 x <- seq( 0, 2*pi, by=0.1 )
 y <- sin( x )
-y <- y + rnorm( length(y), sd=0.1 )
+y <- y + rnorm( length(y), sd=0.1 ) # adding noise to the data
 
 # basic plot
 plot( x, y )
 
 # plot with some options
-plot( x, y, type='o', pch=2, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a sinusoid',
+plot( x, y, type='o', pch=1, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a sinusoid',
 	xlim=c(-0.1,2*pi+0.1), ylim=c(-1.2,1.2) )
 # type = points (p), lines (l), both (b), overlay (o), etc.
 # pch  = point character (circle, square, etc.), a code 1-25

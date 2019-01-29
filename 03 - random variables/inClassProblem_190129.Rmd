@@ -1,0 +1,58 @@
+---
+title: "In class problem 01/29/19"
+output: html_notebook
+---
+
+For random variables $X$ and $Y$
+The cumulative distribution functions are:  
+$F_X(x)$  
+$F_Y(x)$
+
+Assumptions: $X$ and $Y$ are independent
+
+Find $F_Z(x)$ given..  
+a) $Z = max(X, Y)$  
+b) $Z = min(X, Y)$  
+
+***
+
+Solutions:  
+__a__ 
+
+If $Z$ is the maximum of $X$ and $Y$, $Z$ is less than some value $x$ only when both $X$ __and__ $Y$ are less than that value.  
+
+$P( Z \leq x ) = P( X \leq x \cap Y \leq x )$  
+$P( Z \leq x ) = P( X \leq x ) P( Y \leq x )$  
+$F_Z(x) = F_X(x)F_Y(x)$  
+
+
+*** 
+
+__b__ 
+
+__Option 1__: If $Z$ is the minimum of $X$ and $Y$, $Z$ is less than some value $x$ when either $X$ __or__ $Y$ are less than that value. 
+
+$P( Z \leq x ) = P( X \leq x \cup Y \leq x )$  
+We can use the addition rule  
+$P( Z \leq x ) = P( X \leq x ) + P( Y \leq x ) - P( X \leq x \cap Y \leq x )$  
+$F_Z(x) = F_X(x) + F_Y(x) - F_X(x) F_Y(x)$
+
+
+__Option 2__: If $Z$ is the minimum of $X$ and $Y$, $Z$ is greater than some value $x$ when both $X$ __and__ $Y$ are greather than that value.  
+
+$P( Z \geq x ) = P( X \geq x \cap Y \geq x )$  
+$P( Z \geq x ) = P( X \geq x ) P( Y \geq x )$  
+This is similar to what we did  in __a__, but we have to flip the equivalencies to represent these in terms of CDFs.  
+
+$1 -P( Z \leq x ) = (1 - P( X \leq x ))(1 - P( Y \leq x ))$ change to CDF  
+$1 - F_Z(x) = (1 - F_X(x))(1 - F_Y(x))$ multiply  
+$1 - F_Z(x) = 1 - F_Y(x) - F_X(x) + F_X(x)F_Y(x)$ subtract 1 from both sides  
+$- F_Z(x) =  - F_Y(x) - F_X(x) + F_X(x)F_Y(x)$ multiply both sides by -1  
+$F_Z(x) = F_X(x) + F_Y(x) - F_X(x) F_Y(x)$  
+
+
+
+
+
+
+

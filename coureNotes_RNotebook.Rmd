@@ -130,7 +130,7 @@ BUT even and <= 4 ARE independent (if you plug into the formula in 2, both sides
 
 # 22/01/2019
 
-## Set notation
+## Set notation  
 $e_1 = \{O_1, O_2, O_3\}$  
 * the order does not matter here
 
@@ -139,8 +139,72 @@ U --> closely related to OR
 
 We would use AND and OR when talking about the probabilities most of the time. Because intersection and union are not really made for use in every-day language. They're kind of specifically mathematical.  
 
+## Bayes Rule
 
 ***
+
+# 29/01/2019
+
+## Lists  
+
+When you have a list of a bunch of elements + values, it is easier to visualise using `str(x)` instead of `print(x)` or `x`.  
+
+
+## Dataframes  
+
+They're basically a bunch of atomic vectors all with the same length.  
+The lengths are __enforced__, so if you append one of the vectors, it will populate the others to match the lengths (with NULL?)
+
+## [1] vs [[1]]
+
+[1] gives you a sublist or subdataframe (gives you the first element of list/df in the same type as the parent)  
+[[1]] gives you the underlying atomic vector!
+
+## Random variables
+
+Doesn't mean completely random. There is a distribution.  
+
+A __real valued random variable__ is a function that takes Ω and outputs real numbers (ℝ)  
+* However, this can be a little unweildly when we get more complicated experiments
+* So we need a better ways of summarizing these random variables
+
+### CDF: One way of summarizing (Cumulative distribution function)
+
+It's a function; $F_X(x) = P (X <= x)$, where X is the random variable, x is a number
+$F_X$ approaches 0 for very negative values of x (as x --> -inf)  
+$F_x$ approaches 1 for very positive values of x (as x --> inf)  
+Often, when you are doing more interesting statistics, they are more intuitive in terms of the CDF rather than the probability distribution function (PDF)  
+
+for CDFs:  
+* P(a <= X <= b) = F(b) - F(a)
+* P(X > x) = 1 - F(x)
+
+
+
+
+***
+
+# Useful Notes
+
+setwd( '..' )                  # goes up one directory  
+rm( x )                        # remove variable x  
+rm( list=ls() )                # remove all variables  
+save( x, y, file='datafile.Rdata' )  # save variables  
+load( 'datafile.Rdata' )             # load variables  
+unlink( 'datafile.Rdata' )           # delete a file  
+
+rnorm( length, mean, sd)        # gives you length amount of values from a normal distribution  
+dnorm (range, mean, sd)         # gives you a density function (bell shaped curve around mean)  
+
+
+## How R names probability related functions
+
+r norm --> The r indicates a random number generator, norm indicates a normal distribution  
+p norm --> p indicates a CDF  
+d norm --> d indicates a density function  
+
+p unif --> CDF of the uniform distribution  
+
 
 __Jan 22, Feb 5, Feb 12 --> IRTG during these courses__
 
