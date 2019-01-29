@@ -1,12 +1,5 @@
 # datastruc.R  data structures
 
-# useful keyboard shortcuts           os x                 windows
-#   run current line or selection     command-return       control-R
-#   run whole script (.R file)        command-E
-#   halt a script                     control-C
-#   clear console                     command-option-L     control-L
-#   (see menus for others)
-
 ### atomic vector:  1D sequence of elements, all of the same type (numbers, strings, etc.)
 
 # creating atomic vectors
@@ -123,9 +116,27 @@ a <- array( data=x, dim=c(2,3,4) )  # make a 2 x 3 x 4 array of random numbers
 
 # here too, an array is just an atomic vector with a "dim" property that specifies
 # two or more dimensions, e.g., rows, columns, and slices
-# 
-# review relationship between is.atomic(), is.matrix(), is.array()
 
+# interim summary
+# 
+# all the data types covered so far are -- atomic vectors, matrices, and arrays --
+# are *atomic* data types.  is.atomic( x ) is TRUE for all of them.
+# 
+# R variables have a *dim* property that we can get or set with the dim() function.
+#     e.g., print( dim( x ) )
+#     e.g., dim( x ) <- c( 3, 4 )
+# 
+# if dim( x ) is NULL, then x is a *vector*, and is.vector( x ) is TRUE.
+# 
+# if is.atomic( x ) and is.vector( x ) are both TRUE, then x is an *atomic vector*.
+# 
+# if dim( x ) is an atomic vector of integers, e.g., c( 3, 4 ) or c( 3, 4, 5 ),
+# then x is an *array*.  is.array( x ) is then TRUE.
+# 
+# if dim( x ) is an atomic vector with just two integers, e.g., c( 3, 4 ),
+# then x is an array (see above) and also a *matrix*.  is.matrix( x ) is then TRUE.
+
+# now for some non-atomic data types....
 
 ### list:  1D sequence of elements, not necessarily all of the same type
 
@@ -286,4 +297,5 @@ hist(r)
 # histogram with probability units on y-axis
 r <- rnorm( 1000, mean=10, sd=3 )
 hist(r, probability=TRUE, ylim=c(0,0.15))
-curve( dnorm(x,mean=10,sd=3), c(-3,3), col='red', add=TRUE )
+curve( dnorm(x,mean=10,sd=3), c(-3,3), col='red', add=TRUE )  # add to existing plot
+points( 0:20, dnorm( 0:20, mean=10, sd=3 ), col='blue' )      # add to existing plot
