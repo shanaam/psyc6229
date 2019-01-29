@@ -31,8 +31,8 @@ rep( 1:5, 1:5 )
 matrix( c(0,2,3,0,5,0,7,0,0), nrow=3, byrow=TRUE )
 
 # 3
-phi <- atan( vec[2]/vec[1] )
-r <- sqrt( sum( vec^2 ) )
+phi <- atan( vec[2]/vec[1] ) # This is slightly faster than atan2! system.time(replicate( 1000000, phi <- atan2( vec[2], vec[1] )))
+r <- sqrt( sum( vec^2 ) ) #phi is the angle, r is the magnitude
 
 # 4
 x <- 1:100
@@ -70,8 +70,10 @@ z[1] <- 0     # not ok; z does not exist
 # 7
 
 # version 1
-x <- diag( 10 )
-x[ x != 0 ] = 5
+x <- diag( 10 ) # an identity matrix
+x[ x != 0 ] <- 5 # this is fastest BUT using an "=" sign instead of "<-" here gives an error in system.time()
+# or
+x[x == 1] = 5
 
 # version 2
 x <- diag( 10 )
@@ -79,11 +81,15 @@ x[ which( x != 0 ) ] = 5
 
 # version 3
 x <- diag( 10 )
-diag( x ) <- 5
+diag( x ) <- 5 # what's happening here??
 
 # version 4
 x <- diag( 10 )
-x[ seq( 1, 100, by=11 ) ] <- 5
+x[ seq( 1, 100, by=11 ) ] <- 5 #v. slow
+
+#version 5
+x <- diag( 10 )
+replace(x, which(x == 1), 5)
 
 ### chapter 3 ###
 
