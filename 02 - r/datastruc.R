@@ -306,8 +306,8 @@ plot( x, y, type='o', pch=1, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a 
 # ylim = limits of y axis
 
 # add to an existing plot
-z <- sin(x)
-lines( x, z, col='blue' )               # add lines connecting points
+z <- sin(u)
+lines( u, z, col='blue' )               # add lines connecting points
 abline( h=0 )                           # add a straight line
 curve( sin(2*x), c(0,2*pi), col='green', add=TRUE )  # plot a function
 

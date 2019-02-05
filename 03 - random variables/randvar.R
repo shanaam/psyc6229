@@ -68,13 +68,6 @@ x <- seq( -3, 3, by=0.25 )
 points( x, dnorm(x), col='red' )
 
 
-### empirical pdf and cdf
-
-x = rnorm( 1000 )
-hist( x, probability=TRUE )  # empirical pdf; probability=TRUE ensures area = 1
-plot( ecdf( x ) )            # empirical cdf; ecdf returns a function
-
-
 ### some common pdf's are location-scale families
 
 # normal distribution
@@ -82,6 +75,13 @@ mu <- 10
 sigma <- 2
 curve(           dnorm(  x, mean=mu, sd=sigma ), 5, 15 )
 curve( (1/sigma)*dnorm( (x-mu)/sigma          ), 5, 15, type='p', col='red', add=TRUE )
+
+
+### empirical pdf and cdf
+
+x = rnorm( 1000 )
+hist( x, probability=TRUE )  # empirical pdf; probability=TRUE ensures area = 1
+plot( ecdf( x ) )            # empirical cdf; ecdf returns a function
 
 
 ### random number generators (rng's) for some common random variables
