@@ -179,6 +179,33 @@ for CDFs:
 * P(a <= X <= b) = F(b) - F(a)
 * P(X > x) = 1 - F(x)
 
+***
+
+# 05/02/2019
+
+## Indepenedence
+
+P(A|B) = P(A)
+With random variables, there are multiple interpretations of this!
+
+1. P(X=3|Y=1) = P(X=3) (so Y being 1 gives us no information about X being 3. But this says nothing about the rest of the probability space)
+
+2. Any x, any y; P(X=x|Y=y) = P(X=x)
+
+3. X1, X2, X3 ...
+  + If they are pairwise independent: any two
+  + If they are MUTUALLY independent: even if you know any combination of Xs, it doesnt give you information about any other X. P(X1|X2, X3 ...) = P(X1)  
+  + Think over Richard's example in class (X and Y are coin flips (1 or 0), Z = X XOR Y // Z = X != Y). Knowing X gives you no info on Z. BUT knowing both X and Y gives you complete information about Z! (What type of probabiliity is this?)
+
+
+
+
+
+## Normal distributions
+
+They are "stable":
+When you add normal distributions, the mean of the new distribution = mu1 + mu2
+The variance (not std) of the new distribution = var1 + var2
 
 
 

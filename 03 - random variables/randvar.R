@@ -9,7 +9,7 @@ curve( pnorm( x, mean=0, sd=1 ), -5, 5, main='normal cdf' )
 curve( punif( x, min=0, max=1 ), -1, 2, main='uniform cdf' )
 
 # the binomial cdf (discrete)
-curve( pbinom( x, size=20, prob=0.5 ), 0, 20, n=1000, main='binomial cdf' )
+curve( pbinom( x, size=20, prob=0.5 ), 0, 20, n=10000, main='binomial cdf' )
 
 # see ?distributions for more
 
@@ -20,13 +20,13 @@ curve( pbinom( x, size=20, prob=0.5 ), 0, 20, n=1000, main='binomial cdf' )
 curve( dnorm( x, mean=0, sd=1 ), -5, 5, main='normal pdf' )
 
 # the uniform pdf (continuous)
-curve( dunif( x, min=0, max=1 ), -0.5, 1.5, main='uniform pdf' )
+curve( dunif( x, min=0, max=1 ), -0.5, 1.5, n = 10000, main='uniform pdf' )
 
 # the binomial pmf (discrete)
 x <- seq( 0, 20, 0.5 )
 y <- dbinom( x, size=20, prob=0.5 )
 plot( x, y, type='h', main='binomial pmf' )
-# curve( dbinom( x, size=20, prob=0.5 ), 0, 20, n=1000 )
+# curve( dbinom( x, size=20, prob=0.5 ), 0, 20, n=1000 ) # THIS IS NOT A RELIABLE METHOD for plotting prob. mass functions
 
 # see ?distributions for more
 
@@ -35,11 +35,11 @@ plot( x, y, type='h', main='binomial pmf' )
 
 # define our own standard normal cdf as the integral of R's standard normal pdf
 normcdf <- function( x ) {
-    p <- rep( NaN, length(x) )
+    p <- rep( NaN, length(x) ) # initializing the return argument
     for( i in 1:length(x) )
         p[i] <- integrate( dnorm, -Inf, x[i] )$value
     return( p )
-}
+} # it's usually a good idea to allow your function to take in a series of values (not just one)
 
 # plot it
 curve( normcdf, -3, 3 )
@@ -105,6 +105,7 @@ hist( x, breaks=seq(-0.25,20.25,0.5), main='binomially distributed samples' )
 
 s <- 1  # the state of the rng
 
+# making our OWN random number generator!
 rand <- function( ) {
 	
 	# constants
@@ -114,7 +115,7 @@ rand <- function( ) {
 	
 	# update
 	s <<- ( A*s + B ) %% m
-	# Q:  what if we used <- instead of <<- ?
+	# Q:  what if we used <- instead of <<- We change the S OUTSIDE of the function!
 	
 	# return a number in range [0,1)
 	return( s/m )
@@ -127,6 +128,12 @@ rand()
 s <- 1
 rand()
 rand()
+
+x <- vector()
+for(i in 1:10000){
+  x[i] <- rand()
+}
+hist(x, freq = FALSE)
 
 
 ### rng seeds
