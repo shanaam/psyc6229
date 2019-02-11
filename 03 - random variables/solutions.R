@@ -13,10 +13,10 @@ df <- expand.grid( d1=1:6, d2=1:6 )  # the expand.grid function is the cartesian
 
 olist <- pmin( df$d1, df$d2 )     # get the outcomes
 
-sspace <- unique( olist )         # eliminate duplicates to get the sample space
+sspace <- sort( unique( olist ) ) # eliminate duplicates to get the sample space
 n <- as.vector( table( olist ) )  # count number of occurrences of each outcome
 p <- n / sum(n)                   # convert counts to probabilities
-plot( sspace, p, type='h' )       # plot the pmf
+plot( sspace, p, type='h', ylim=c(0,1.1*max(p)) )  # plot the pmf
 e <- sum( sspace*p )              # find the expected value
 
 # (b) X = absolute difference between two values showing
@@ -26,11 +26,11 @@ olist <- abs( df$d1 - df$d2 )     # get the outcomes
 # notice that the next five lines are the same as the lines we used in part (a),
 # so really we should put them into a function instead of typing them out again.
 # this time I'll keep them here to make it clearer what's going on, but as we
-# get more familiar with R code I'll make more extensive use of functions.
-sspace <- unique( olist )         # eliminate duplicates to get the sample space
+# become more familiar with R code I'll make more extensive use of functions.
+sspace <- sort( unique( olist ) ) # eliminate duplicates to get the sample space
 n <- as.vector( table( olist ) )  # count number of occurrences of each outcome
 p <- n / sum(n)                   # convert counts to probabilities
-plot( sspace, p, type='h' )       # plot the pmf
+plot( sspace, p, type='h', ylim=c(0,1.1*max(p)) )  # plot the pmf
 e <- sum( sspace*p )              # find the expected value
 
 # (c) X = minimum value showing divided by the other value showing
@@ -38,10 +38,10 @@ e <- sum( sspace*p )              # find the expected value
 olist <- pmin( df$d1, df$d2 ) / pmax( df$d1, df$d2 )  # get the outcomes
 
 # here again, same five lines as above.
-sspace <- unique( olist )         # eliminate duplicates to get the sample space
+sspace <- sort( unique( olist ) ) # eliminate duplicates to get the sample space
 n <- as.vector( table( olist ) )  # count number of occurrences of each outcome
 p <- n / sum(n)                   # convert counts to probabilities
-plot( sspace, p, type='h' )       # plot the pmf
+plot( sspace, p, type='h', ylim=c(0,1.1*max(p)) )  # plot the pmf
 e <- sum( sspace*p )              # find the expected value
 
 
