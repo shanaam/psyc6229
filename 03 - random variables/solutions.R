@@ -25,8 +25,9 @@ olist <- abs( df$d1 - df$d2 )     # get the outcomes
 
 # notice that the next five lines are the same as the lines we used in part (a),
 # so really we should put them into a function instead of typing them out again.
-# this time I'll keep them here to make it clearer what's going on, but as we
+# here I'll keep the duplicated lines to make it clearer what's going on, but as we
 # become more familiar with R code I'll make more extensive use of functions.
+# also, below (part (abc') I show how to put this code into a function.
 sspace <- sort( unique( olist ) ) # eliminate duplicates to get the sample space
 n <- as.vector( table( olist ) )  # count number of occurrences of each outcome
 p <- n / sum(n)                   # convert counts to probabilities
@@ -43,6 +44,27 @@ n <- as.vector( table( olist ) )  # count number of occurrences of each outcome
 p <- n / sum(n)                   # convert counts to probabilities
 plot( sspace, p, type='h', ylim=c(0,1.1*max(p)) )  # plot the pmf
 e <- sum( sspace*p )              # find the expected value
+
+# (abc')  let's do all of the above again, this time putting the analysis code
+#         into a function
+
+getpmf <- function( result_list ) {
+    sspace <- sort( unique( result_list ) ) # eliminate duplicates to get the sample space
+    n <- as.vector( table( result_list ) )  # count number of occurrences of each outcome
+    p <- n / sum(n)                         # convert counts to probabilities
+    plot( sspace, p, type='h', ylim=c(0,1.1*max(p)) )  # plot the pmf
+    e <- sum( sspace*p )                    # find the expected value
+}
+
+olist <- pmin( df$d1, df$d2 )  # part (a)
+getpmf( olist )
+
+olist <- abs( df$d1 - df$d2 )  # part (b)
+getpmf( olist )
+
+olist <- pmin( df$d1, df$d2 ) / pmax( df$d1, df$d2 )  # part (c)
+getpmf( olist )
+
 
 
 # problem 9
