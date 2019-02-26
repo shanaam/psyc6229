@@ -309,7 +309,7 @@ plot( x, y, type='o', pch=1, lwd=2, col='red', xlab='x', ylab='sin(x)', main='a 
 z <- sin(u)
 lines( u, z, col='blue' )               # add lines connecting points
 abline( h=0 )                           # add a straight line
-curve( sin(2*x), c(0,2*pi), col='green', add=TRUE )  # plot a function
+curve( sin(2*x), col='green', add=TRUE )  # plot a function
 
 # histogram
 r <- rnorm( 1000, mean=10, sd=3 )
@@ -318,5 +318,5 @@ hist(r)
 # histogram with probability units on y-axis
 r <- rnorm( 1000, mean=10, sd=3 )
 hist(r, probability=TRUE, ylim=c(0,0.15))
-curve( dnorm(x,mean=10,sd=3), c(-3,3), col='red', add=TRUE )  # add to existing plot
+curve( dnorm(x,mean=10,sd=3), col='red', add=TRUE )           # add to existing plot
 points( 0:20, dnorm( 0:20, mean=10, sd=3 ), col='blue' )      # add to existing plot
