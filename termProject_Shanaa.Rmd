@@ -1,0 +1,20 @@
+---
+title: "An introduction to Linear Mixed Models - by Shanaathanan Modchalingam"
+output: html_notebook
+---
+
+# 1. Introducing Linear Mixed Models
+
+Say you have xxx...
+
+## A case study on when it may be useful
+
+Introduce the example to be done in section 4 here.
+
+# 2. The math
+
+## Try to explain (intuitively) why we do what we do
+
+# 3. Implementation 
+
+# 4. An example

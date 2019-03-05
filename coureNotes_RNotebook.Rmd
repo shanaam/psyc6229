@@ -207,6 +207,96 @@ They are "stable":
 When you add normal distributions, the mean of the new distribution = mu1 + mu2
 The variance (not std) of the new distribution = var1 + var2
 
+***
+
+# 26/02/2019
+
+Radiology task:
+
+% "yes" | A          | B 
+--------| -----------| ---------- 
+pre     | Y: 0.70    | Y: 0.65        
+-       | N: 0.70    | N: 0.50 
+post    | Y: 0.90    | Y: 0.80
+-       | N: 0.90    | N: 0.50 (or 0.60)
+
+Y = hits
+N = false alarms
+
+
+A has 0 sensitivity, but their bias increased!
+What about B though? has their sensitivity increased? How do you tell?
+
+## Signal detection theory
+
+Response matrix | "Y" | "N" 
+----------------| ----| ----
+Y               | Hit (H) | Miss (M) 
+N               | False alarm (FA) | Correct rejection (CR) 
+
+These names are a little arbritary (different in diff fields, e.g.: true positive, false positive, true negative, false negative)  
+Aside: sensitivity and selectivity in some fields is NOT the same sensitivity we are talking about (they're usually talkinb about Hit rate)  
+
+H = proportion of Y trials where subject says "Y"  
+Therefore, __M = 1 - Y__, so we need to only report ONE column  
+It's convention to report H and FA (easy to test; give them 100 Y and 100 N trials and make them "detect" whether it is truly Yes or No)  
+__This does NOT have to be a detection task!__ It can be whether something is leaning left/right, whether a face is a M/F, etc. (even works when people also rate their confidence in their response)  
+
+In all situations, you want sensitivity to be as high as possible. Bias on the other hand (whether you have more False alarms vs more Misses) is complicated and you have to decide which direction you rather it fall  
+
+### Assumptions
+
+* Your decision is based on ONE one-dimentional information: <---------------------------->  
++ You can think of this as "confidence" or "spike rate of a neuron" (low results in one response, and high results in another)  
++ This is called a "decision variable"
++ This is not always the case (your decision can be based on 2 variables, but for now, we will say it's based on one)  
+
+* Each trial gives you a decision variable (some information). You have to determine whether this comes from a Y trial or a N trial  
++ Therefore, we can think of it as being distributed normally on the 1-D number line with a mean (which is higher for a Y trial than a N trial) and a sd  
++ On a single trial, you don't know which distribution this decision variable came from! You have to guess whether it comes from a Y distribution or a N distribution, and make your decision based on that  
+
+* We have a fixed criterion that determines the response   
++ Where the two disctributions cross  
++ Anything above this criterion results in a "Y", anything below results in a "N"
+
+### Sensitivity
+
+See figure in notes  
+
+- The area under these curves determine hit rate, false alarm rate, etc.    
+- With these assumptions in mind, we can formulate sensitivity (d') and bias (c)  
+
+Given area under the curve (say, Hit rate), you can use qnorm to calculate the x!  
+- In signal detection theory, qnorm is known as z(p)  
+- __z(p) answers the question:__ how many sd above the mean is x to have area P under the curve to the left of it.  
+- i.e., think of this in terms of z-score (z = (x-mu/sd))
+- __useful:__ z(1 - P) = -z(P)
+
+
+### ROC curve
+
+Acronym: Receiver operating characteristic curve
+- A plot that plots Hits on the y-axis and False alarms on the x-axis
+- Signal detection theory predicts an ROC curve like ones we see in real life after conducting some experiments  
+- Other models of decision making on the other hand, like the strawman one, predicts a different curve, that doesn't come about  
+
+***
+
+# 05/03/2019
+
+In 2AFCs:
+$$d' = \frac{z(H) - z(FA)}{\sqrt{2}}$$
+
+## Cue combination
+
+
+
+
+
+
+
+
+
 
 
 ***
@@ -234,5 +324,4 @@ p unif --> CDF of the uniform distribution
 
 
 __Jan 22, Feb 5, Feb 12 --> IRTG during these courses__
-
 
