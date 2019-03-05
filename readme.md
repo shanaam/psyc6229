@@ -1,5 +1,6 @@
 
 ### Upcoming events
 
-* **March 5.**  Test #4; Problem set 1 due
-
+**March 19.**  Test #5
+**April 2.**  Test #6; Problem set 2 due
+**April 9.** Term project due
