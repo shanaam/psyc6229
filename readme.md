@@ -1,6 +1,8 @@
 
 ### Upcoming events
 
-* **February 5.**  Term project proposal due
-* **February 26.**  Test #3
+**March 19.**  Test #5
 
+**April 2.**  Test #6; Problem set 2 due
+
+**April 9.** Term project due
