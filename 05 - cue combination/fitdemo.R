@@ -14,13 +14,15 @@ phigher <- nhigher/ntrials                              # 'nhigher' expressed as
 psyfn <- function( x, mu, sigma )
 	pnorm( x, mu, sigma )
 	
-# define a maximum likelihood objective function
+# define a maximum likelihood objective function        # 'objective function' is a function youre trying to minimize
 obj <- function( p )
 	-sum(log( dbinom( nhigher, ntrials, psyfn( stimlev, p[1], p[2] ) ) ))
 
 # find the parameters that minimize the objective function
-pinit <- c( 0.5, 0.2 )             # initial guess
+pinit <- c( 0.5, 0.2 )             # initial guess: this is just to get a sense of the MAGNITUDE you expect (e.g. 1 vs 1 billion)
 phat <- optim( pinit, obj )$par    # find the parameters of the best fit
+
+#NOTE: Optim expects an obj function with ONE argument, but the one argument can be a vector with multiple parts (like we have here)
 
 
 ### part 2.  report the fit and plot it
