@@ -1,0 +1,281 @@
+---
+title: "Visual Search Demo"
+output: html_notebook
+---
+
+Data from real visual search tasks.
+
+```{r}
+data <- read.table("PSYC6229_search_data.csv", header = TRUE, sep = ",")
+
+summary(subset(data, Condition == "2_vs_5"))
+```
+We plot reaction times, columns are set sizes and rows are the different conditions  
+
+We add '& data < 2000' to remove some very obv. outliers  
+```{r}
+par(mfrow=c(3,4)) 
+for (i in unique(data$Condition)) {
+  for (j in sort(unique(data$Setsize))) {
+    hist(data$RT[data$Condition==i & data$Setsize==j & data$RT < 2000], 
+         xlab="RT in msec", 
+         main=paste(i,", set size = ",j), 
+         col="blue") 
+  } 
+}
+
+```
+
+### Pattern of errors  
+
+```{r}
+aggregate(data$Error, list(data$Condition,data$Setsize), mean)
+dev.new() 
+par(mfrow=c(3,4)) 
+for (i in unique(data$Condition)) { 
+  for (j in sort(unique(data$Setsize))) { 
+    tmp <- data$Type[data$Condition==i & data$Setsize==j] 
+    counts <- table(tmp) 
+    barplot(100*counts[c("FA","MISS")]/sum(counts), 
+            ylim = c(0,5), 
+            main=paste(i,", set size = ",j)) 
+  } 
+}
+```
+Note: the miss rates are the ones that increase was setsize + condition gets harder  
+
+
+### Patern of errors by subjects
+
+This is how you would plot for a paper  
+```{r}
+par(mfrow=c(3,4)) 
+for (i in unique(data$Condition)) { 
+  for (j in sort(unique(data$Setsize))) { 
+    tmp <- data[data$Condition==i & data$Setsize==j,] 
+    bySub <- aggregate(tmp$Error, list(tmp$Subject,tmp$Tpresent), mean) 
+    meansBySub <- aggregate(bySub$x, list(bySub$Group.2), mean)
+    means <- 100 * meansBySub$x 
+    sds <- aggregate(bySub$x, list(bySub$Group.2), sd) 
+    sderr <- 100 * sds$x / sqrt(length(unique(bySub$Group.1)))
+    barHeights <- barplot(means, names.arg = list("FA","MISS"), 
+                          ylim = c(0,12), main=paste(i,", set size = ",j)) 
+    arrows(barHeights, means - sderr, barHeights, means + sderr, 
+           lwd = 1.5, angle = 90, code = 3, length = 0.05) 
+  } 
+}
+```
+Note that error bars are just lines (arrows?) that are drawn on top of the plot.
+
+
+### d' by subjects
+
+```{r}
+par(mfrow=c(3,4)) 
+for (i in unique(data$Condition)) { 
+  for (j in sort(unique(data$Setsize))) { 
+    tmp <- data[data$Condition==i & data$Setsize==j,] 
+    bySub <- aggregate(tmp$Error, 
+                       list(tmp$Subject,tmp$Tpresent), mean) 
+    bySub$x[bySub$x < 0.005] <- 0.005 
+    bySub$x[bySub$x > 0.995] <- 0.995 
+    zHIT <- qnorm(1-bySub$x[bySub$Group.2==1]) 
+    zFA <- qnorm(bySub$x[bySub$Group.2==0]) 
+    dprimeBySub <- zHIT - zFA 
+    barHeights <- barplot(dprimeBySub, 
+                          names.arg = unique(bySub$Group.1), 
+                          ylim = c(0,7), 
+                          main=paste(i,", set size = ",j)) 
+  } 
+}
+```
+Some of the problems you can get with d' is that you can get infinity (if they have a false alarm or hit rates of 0 or 100).  
+One way of fixing this issue is to replace very small values (so 0, basically) with a small non-0 number (e.g. 0.005 in the above example).  
+You also want to do that to 1s -- replace them all with 0.995.  
+Maximum possible d' is 6.2ish, thats why ylim is c(0,7).  
+Most d' are 4 (which she considers very high). The lab is looking at reaction times (the 2-stage model), so they set up exp in a way that roughly equalizes accuracy but has differences in reaction time.  
+
+### Back to reaction times  
+
+Are these distributions normal?  
+```{r}
+p <- matrix(ncol=5, nrow=4*29*2) 
+colnames(p) <- list("cond", "setsize", "subject", "tpres", "pval")
+counter <- 1 
+for (i in unique(data$Condition)) { 
+  for (j in sort(unique(data$Setsize))) { 
+    for (ii in unique(data$Subject[data$Condition==i & data$Setsize==j])) { 
+      for (jj in unique(data$Tpresent)) { 
+        tmp <- data[data$Condition==i & data$Setsize==j & data$Subject==ii & data$Tpresent==jj,] 
+        result <- shapiro.test(tmp$RT) 
+        p[counter,] <- c(i, j, ii, jj, result$p.value) 
+        counter <- counter + 1 
+        }}}} 
+
+testresults = as.data.frame(p) 
+View(testresults)
+```
+Above: We do a shapiro-wilk's test for non-normality.  
+We get really small pvals (so the test is significant for all subjects)... SO they are NOT normal.  
+
+What can we do? One option: __trim the data!__.  
+We just get rid of all that data that's above/below some sd and assume it is gaussian. This introduces some bias, but it's easy  
+```{r}
+flag <- 1 
+for (i in unique(data$Condition)) { 
+  for (j in sort(unique(data$Setsize))) { 
+    for (ii in unique(data$Subject[data$Condition==i & data$Setsize==j])) { 
+      for (jj in unique(data$Tpresent)) { 
+        tmp <- data[data$Condition==i & data$Setsize==j & data$Subject==ii & data$Tpresent==jj,] 
+        thHigh <- mean(tmp$RT) + (2.5*sd(tmp$RT)) 
+        thLow <- mean(tmp$RT) - (2.5*sd(tmp$RT)) 
+        new <- tmp[tmp$RT > thLow & tmp$RT < thHigh,] 
+        if (flag==1) { 
+          data2 <- new 
+          flag <- 0 } 
+        else { 
+          data2 <- rbind(data2, new) } 
+      }}}}
+
+dataOld <- data
+data <- data2
+```
+
+This new data file gets rid of all the rts that are long basically.  
+We can now use the trimmed data and look at it using all our previous code if we want.  
+Note that it's still not normally distributed, but it's better.  
+
+### Search slopes
+
+```{r}
+x <- sort(unique(data$Setsize)) 
+for (i in unique(data$Condition)) { 
+  dev.new() 
+  tmp <- data[data$Condition==i,] 
+  bySub <- aggregate(tmp$RT, 
+                     list(tmp$Subject,tmp$Tpresent,tmp$Setsize), mean) 
+  means <- aggregate(bySub$x, 
+                     list(bySub$Group.2, bySub$Group.3), mean) 
+  means <- means[order(means$Group.2),] 
+  y0 = means$x[means$Group.1==0]  # means for the target absent condition
+  y1 = means$x[means$Group.1==1]  # means for the target present condition
+  plot(x, y0, col="blue", ylim=c(0,2500), 
+       xlab="Set size", ylab="RT (ms)", main=i) 
+  points(x, y1, col="red") 
+  regressline <- lm(y0 ~ x) 
+  abline(regressline) 
+}
+```
+
+Note: plot these.
+
+
+# Demo 2: Signal Detection Theory simulation
+
+```{r}
+library(ggplot2)
+
+dprime <- 2
+targs <- data.frame(response=rnorm(500, mean=(dprime/2), sd=1))
+dists <- data.frame(response=rnorm(500, mean=(-dprime/2), sd=1))
+targs$label <- "Target" 
+dists$label <- "Distractor" 
+stimuli <- rbind(targs,dists) 
+ggplot(stimuli, aes(response, fill=label)) +
+  geom_density(alpha=0.5)
+
+```
+d' is up to you. It ranges from 0 (chance) to 5ish.   
+This is our starting distribution: If we had 1 distractor and 2 target, responses would follow this distribution.  
+
+
+### Maximum Rule  
+```{r}
+dprime <- 2 
+setsize <- 18 
+targs <- matrix(ncol=1, nrow=500) 
+dists <- matrix(ncol=1, nrow=500) 
+```
+
+We then simulate a maximum rule observer.  
+We draw targets and distractors.  
+```{r}
+counter <- 1 
+while (counter <= nrow(targs)) { 
+  nitems <- setsize 
+  tsample <- c(rnorm(1, mean=(dprime/2), sd=1), 
+               rnorm(nitems-1, mean=(-dprime/2), sd=1)) 
+  dsample <- rnorm(nitems, mean=(-dprime/2), sd=1) 
+  targs[counter,] <- max(tsample) 
+  dists[counter,] <- max(dsample) 
+  counter <- counter+1 
+} 
+targs <- data.frame(response=targs, label="Tpresent") 
+dists <- data.frame(response=dists, label="Tabsent") 
+stimuli <- rbind(targs,dists) 
+ggplot(stimuli, aes(response, fill=label)) + 
+  geom_density(alpha=0.5)
+```
+
+### Maximum Role over set sizes
+
+```{r}
+dprime <- 2 
+setsize <- c(3,6,12,18) 
+targs <- matrix(ncol=4, nrow=500) 
+dists <- matrix(ncol=4, nrow=500)
+
+for (i in 1:length(setsize)) { 
+  counter <- 1 
+  nitems <- setsize[i] 
+  while (counter <= nrow(targs)) { 
+    tsample <- c(rnorm(1, mean=(dprime/2), sd=1), 
+                 rnorm(nitems-1, mean=(-dprime/2), sd=1)) 
+    dsample <- rnorm(nitems, mean=(-dprime/2), sd=1) 
+    targs[counter,i] <- max(tsample) 
+    dists[counter,i] <- max(dsample) 
+    counter <- counter+1 
+  }
+  targtmp <- data.frame(response=targs[,i], label="Tpresent") 
+  disttmp <- data.frame(response=dists[,i], label="Tabsent") 
+  stimuli <- rbind(targtmp,disttmp) 
+  ggp <- ggplot(stimuli, aes(response, fill=label)) + 
+    geom_density(alpha=0.5) + 
+    ggtitle(paste("Setsize = ",nitems)) 
+  dev.new() 
+  print(ggp) 
+  ggp
+}
+
+```
+
+## Accuracy over set size
+
+```{r}
+diffMeans <- colMeans(targs) - colMeans(dists) 
+sds <- sqrt(( (apply(targs,2,sd)^2) + (apply(dists,2,sd)^2) ) / 2) 
+dSetsize <- diffMeans / sds
+
+dev.new() 
+plot(setsize, dSetsize, xlab="Set size", ylab="Simulated d prime", main=paste("d prime = ",dprime))
+```
+
+
+## RT over set size
+
+This is based on speed-accuracy trade-off and it's pretty hand-wavy. This is very simplified.  
+```{r}
+nonsearchRT <- 400 
+beta <- 500 
+maxDprime <- 6.2 
+simulatedRT <- nonsearchRT + (beta * (1 - (log(dSetsize)/log(maxDprime))) )
+
+dev.new() 
+plot(setsize, simulatedRT, xlab="Set size", ylab="RT (msec)", 
+     main=paste("Simulated RT over set size, d prime = ",dprime)) 
+regressline <- lm(simulatedRT ~ setsize) 
+abline(regressline) 
+summary(regressline)
+
+```
+
