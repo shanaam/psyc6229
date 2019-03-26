@@ -1,4 +1,4 @@
-# bootstrap1a.R  Bootstrap the parameters of a fitted function
+# bootstrap1.R  Bootstrap the parameters of a fitted function
 
 rm( list=ls() )
 
