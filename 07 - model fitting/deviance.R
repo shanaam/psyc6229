@@ -51,11 +51,14 @@ for (i in 1:devn) {
     dfstar <- df
     dfstar$nhigher <- rbinom( nrow(dfstar), dfstar$ntrials, pfit )
     dfstar$phigher <- dfstar$nhigher / dfstar$ntrials
-    
+
     # find deviance of resampled data
     devstar[i] <- devfn( dfstar$nhigher )
     
 }
+
+# or instead of the for loop, we can use just this one line
+# devstar <- replicate( 1000, devfn( rbinom( nrow(df), df$ntrials, pfit ) ) )
 
 # show distribution of deviance
 hist( devstar, breaks=25, probability=TRUE )

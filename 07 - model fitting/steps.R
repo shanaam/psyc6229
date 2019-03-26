@@ -43,7 +43,8 @@ prod( dbinom( df$nhigher, df$ntrials, psyfn( df$stimlev, mu, sigma ) ) )
 
 # forget about our guesses for mu and sigma, and make the line above
 # into a function of a variable p (which is an atomic vector of length 2)
-obj <- function( p ) -sum(log( dbinom( df$nhigher, df$ntrials, psyfn( df$stimlev, p[1], p[2] ) ) ))
+obj <- function( p )
+    -sum(log( dbinom( df$nhigher, df$ntrials, psyfn( df$stimlev, p[1], p[2] ) ) ))
 
 # find the parameters that minimize the objective function
 pinit <- c( 0.5, 0.2 )             # initial guess
