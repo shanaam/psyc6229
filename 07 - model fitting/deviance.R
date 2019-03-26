@@ -44,7 +44,7 @@ dev <- devfn( df$nhigher )
 
 # find distribution of deviance
 devn <- 10000
-devstar <- rep( NaN, devn )
+devstar <- rep( NA, devn )
 for (i in 1:devn) {
     
     # resample data
