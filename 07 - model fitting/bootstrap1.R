@@ -16,19 +16,22 @@ psyfn <- function( x, mu, sigma )
 obj <- function( p, data )
     -sum(log( dbinom( data$nhigher, data$ntrials, psyfn( data$stimlev, p[1], p[2] ) ) ))
 
+
+## Bootstrap stuff:
 # initialize bootstrap info
 nboot <- 1000
 phatstar <- matrix( nrow=nboot+1, ncol=2 )
+# 1001 rows: first is fit to actual data, the rest to bootstrapped data
 
 # bootstrap
 for( i in 1:(nboot+1) ) {
     
-    # resample data
+    # resample data __ONLY AFTER the first time through__
     dfstar <- df
     if( i>1 ) {
         dfstar$nhigher <- rbinom( nrow(df), df$ntrials, df$phigher )
         dfstar$phigher <- dfstar$nhigher / dfstar$ntrials
-    }
+    } # replaces the data in the df with a generated dataframe
     
     # find the parameters that minimize the objective function
     pinit <- c( 0.5, 0.2 )                       # initial guess
@@ -36,14 +39,14 @@ for( i in 1:(nboot+1) ) {
     phatstar[i,] <- m$par
     
     # report the fit
-    cat( sprintf('pse = %.4f, jnd = %.4f\n',phatstar[i,1],phatstar[i,2] ) )
+    # cat( sprintf('pse = %.4f, jnd = %.4f\n',phatstar[i,1],phatstar[i,2] ) )
     
-    # occasionally plot resampled data and fitted function
-    if( i %% 50 == 0 ) {
-        with( dfstar, plot( stimlev, phigher, col='red', ylim=c(-0.1,1.1), xlab='stimulus level', ylab='proportion judged higher' ) )
-        curve( psyfn( x, phatstar[i,1], phatstar[i,2] ), col='green', add=TRUE )
-        Sys.sleep(0.1)
-    }
+    # # occasionally plot resampled data and fitted function
+    # if( i %% 50 == 0 ) {
+    #     with( dfstar, plot( stimlev, phigher, col='red', ylim=c(-0.1,1.1), xlab='stimulus level', ylab='proportion judged higher' ) )
+    #     curve( psyfn( x, phatstar[i,1], phatstar[i,2] ), col='green', add=TRUE )
+    #     Sys.sleep(0.1) # this tells R to pause (do nothing, for 0.1 seconds); if there is no idle time, since plots take a while to make: the plots might not be updated right away
+    # }
     
 }
 

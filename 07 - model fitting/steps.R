@@ -16,14 +16,18 @@ psyfn <- function( x, mu, sigma )
 mu <- 0.10
 sigma <- 0.20
 
-# what's the probability of a correct response at the lowest stimulus
-# level, according to these values of mu and sigma?
+# what's the probability of a correct response at the first stimulus level in our dataframe
+# , according to these values of mu and sigma?
 psyfn( df$stimlev[1], mu, sigma )
+# is this number (0.5) consistent with the data we got (1)?
+
 
 # what's the probability of getting the observed number of correct
 # responses at the lowest stimulus level, according to these values
 # of mu and sigma?
+# i.e. what is the porobability of getting 1 (from data) out of 20 trials. If underlying prob is 0.5? ANS: suuuuper small
 dbinom( df$nhigher[1], df$ntrials[1], psyfn( df$stimlev[1], mu, sigma ) )
+
 
 # what are the probabilities of correct responses at *all* the stimulus
 # levels, according to these values of mu and sigma?
@@ -33,18 +37,27 @@ psyfn( df$stimlev, mu, sigma )
 # responses at *all* the stimulus levels, according to these values of mu
 # and sigma?
 dbinom( df$nhigher, df$ntrials, psyfn( df$stimlev, mu, sigma ) )
+# We did the same thing but now checking for all 10 stimulus levels. ALL the prob of getting our data 
+# if the fitted function has our mu and sigma are... terrible
 
 # what's the joint probability of all these observed numbers of correct
 # responses, according to these values of mu and sigma?
 prod( dbinom( df$nhigher, df$ntrials, psyfn( df$stimlev, mu, sigma ) ) )
+# We don't want 10 different probs, we want ONE number that tells us how probable All of the observed data is,
+# if we have our parameters: Veeery small! xxx...e-108!
+
 
 # convert this probability into a negative log likelihood
+# THIS is to avoid the computer ROUNDING DOWN TO ZERO! 
+# This can confuse things like optim: if a bunch of likelihoods are ZERO, it doesn't think it can improve... so it will give up
 -sum(log( dbinom( df$nhigher, df$ntrials, psyfn( df$stimlev, mu, sigma ) ) ))
+# the sum is b/c: log(A*B) = log(A) + log(B) --> since we dont have to multiply small numbers by small numbers, way less likely to get to ZERO
 
 # forget about our guesses for mu and sigma, and make the line above
 # into a function of a variable p (which is an atomic vector of length 2)
 obj <- function( p )
     -sum(log( dbinom( df$nhigher, df$ntrials, psyfn( df$stimlev, p[1], p[2] ) ) ))
+# this CAN be written as function(my, sigma) BUT R's minimizing functions minimize ONE thing (but that one thing can have 2 components!)
 
 # find the parameters that minimize the objective function
 pinit <- c( 0.5, 0.2 )             # initial guess

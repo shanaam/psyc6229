@@ -16,7 +16,8 @@ psyfn <- function( x, mu, sigma )
 obj <- function( p, data )
     -sum(log( dbinom( data$nhigher, data$ntrials, psyfn( data$stimlev, p[1], p[2] ) ) ))
 
-# make bootstrap function
+# make bootstrap function 
+# This only gives you the parameters of the fit (either bootstrapped, or not)
 bootfn <- function( resample=TRUE ) {
     
     # resample data
@@ -36,8 +37,10 @@ bootfn <- function( resample=TRUE ) {
 # get fit to original data
 phat <- bootfn( resample=FALSE )
 
-# bootstrap
+# bootstrap 
+# replicate runs a function a bunch of times
 phatstar <- replicate( 1000, bootfn() )
+# note that replicate is wide: gives you 2 x 1000 matrix
 
 # histogram bootstrapped PSEs
 hist( phatstar[1,], main='bootstrapped PSEs' )

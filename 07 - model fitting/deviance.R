@@ -24,7 +24,8 @@ obj <- function( p, data )
 
 # fit the objective function
 pinit <- c( 0.5, 0.2 )                      # initial guess
-phat <- optim( pinit, obj, data=df )$par    # find parameters of best fit
+phat <- optim( pinit, obj, data=df )$par    # find parameters of best fit 
+# note that for optim, optional arguments gets passed to obj
 
 # show data and fitted function
 par( mfrow=c(1,2) )
@@ -42,6 +43,7 @@ devfn <- function( nhigher )
 # find the deviance of the actual data
 dev <- devfn( df$nhigher )
 
+# This looks like bootstrapping BUT it's a Monte Carlo Simulation
 # find distribution of deviance
 devn <- 10000
 devstar <- rep( NA, devn )

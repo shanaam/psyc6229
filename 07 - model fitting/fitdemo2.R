@@ -7,7 +7,7 @@ rm( list=ls() )
 # make up some behavioural data for a discrimination task
 df <- data.frame( stimlev=seq( 0.1, 1.0, by=0.1 ),                  # stimulus levels
                   ntrials=rep( 20, times=10 ),                      # number of trials at each stimulus level
-                  nhigher=c( 1, 0, 4, 5, 8, 10, 12, 14, 19, 20 ) )  # number of trials where the observer responded "higher"
+                  nhigher=c( 1, 0, 4, 5, 8, 10, 12, 14, 19, 20 ) )  # number of trials where the observer responded "higher" THE ACTUAL DATA
 df$phigher <- df$nhigher / df$ntrials                               # 'nhigher' expressed as a proportion
 
 # choose the form of the psychometric function
@@ -15,10 +15,12 @@ psyfn <- function( x, mu, sigma )
     pnorm( x, mu, sigma )
 
 # define a maximum likelihood objective function
+# p will havve 2 elements (first element = mean, and second = sd)
 obj <- function( p )
 	-sum(log( dbinom( df$nhigher, df$ntrials, psyfn( df$stimlev, p[1], p[2] ) ) ))
 
 # alternatively, define a sum-of-squares objective function
+# Here, you're again fitting a normal cdf but figuring the sum of squares of the fit
 # obj <- function( p )
 #     sum( ( df$phigher - psyfn( df$stimlev, p[1], p[2] ) )^2 )
 

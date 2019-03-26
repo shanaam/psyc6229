@@ -303,6 +303,8 @@ $$d' = \frac{z(H) - z(FA)}{\sqrt{2}}$$
 
 # Useful Notes
 
+matrix[-1, ] : everything __except__ the first row
+
 setwd( '..' )                  # goes up one directory  
 rm( x )                        # remove variable x  
 rm( list=ls() )                # remove all variables  
@@ -313,6 +315,7 @@ unlink( 'datafile.Rdata' )           # delete a file
 rnorm( length, mean, sd)        # gives you length amount of values from a normal distribution  
 dnorm (range, mean, sd)         # gives you a density function (bell shaped curve around mean)  
 
+you can name elements of an atomic vector! e.g. c(pse=0.5, jnd=0.5)
 
 ## How R names probability related functions
 
@@ -322,6 +325,11 @@ d norm --> d indicates a density function
 
 p unif --> CDF of the uniform distribution  
 
+### Models in R
 
-__Jan 22, Feb 5, Feb 12 --> IRTG during these courses__
+__col1 ~ pnorm( col2, parameter1, parameter1)__
+
+Meaning: col1 (of a dataframe) varies on ... right side
+
+
 
