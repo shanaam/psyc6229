@@ -23,8 +23,8 @@ obj <- function( p, data )
     -loglike( data$nhigher, data$ntrials, psyfn( data$stimlev, p[1], p[2] ) )
 
 # fit the objective function
-pinit <- c( 0.5, 0.2 )                          # initial guess
-phat <- optim( pinit, obj, NULL, data=df )$par  # find parameters of best fit
+pinit <- c( 0.5, 0.2 )                      # initial guess
+phat <- optim( pinit, obj, data=df )$par    # find parameters of best fit
 
 # show data and fitted function
 par( mfrow=c(1,2) )
