@@ -19,7 +19,13 @@ print( cbind( beta, betahat ) )           # compare true and estimated beta
 # notice that we don't recover beta exactly.  this is OK, because the data
 # are noisy -- we used rnorm() to generate y.
 
-# repeat the above, using R's lm() function, which is numerically more stable
+# plot actual and fitted y values
+yhat <- X %*% betahat
+mn <- min(y,yhat) ; mx <- max(y,yhat)
+plot( y, yhat, type='p', col='red', xlim=c(mn,mx), ylim=c(mn,mx) )
+lines( c(mn,mx), c(mn,mx), type='l', lty=2 )
+
+# repeat the fit using R's lm() function, which is numerically more stable
 fit <- lm( y ~ X - 1 )                    # fit a linear model with y-intercept set to zero
 betahat <- fit$coefficients               # get the regression coefficients
 print( cbind( beta, betahat ) )           # check the solution
