@@ -3,7 +3,7 @@
 rm( list=ls() )
 
 # matrix arithmetic
-x <- matrix( c(1,4,2,3,1,5,4,1,4),          nrow=3 )
+x <- matrix( c(1,4,2,3,1,5,4,1,4),          nrow=3 ) #note R fills in each column before moving onto next column
 y <- matrix( c(11,14,19,18,17,17,12,13,11), nrow=3 )
 a <- x + y
 b <- x - y
@@ -18,6 +18,7 @@ xinv <- solve( x )  # invert matrix x
 z1 <- xinv %*% x
 z2 <- x %*% xinv
 
+
 # in principle z1 and z2 should be the 3 x 3 identity matrix:
 # 
 #   1 0 0
@@ -26,6 +27,7 @@ z2 <- x %*% xinv
 # 
 # but notice that the elements of z1 and z2 are typically not exactly zero or one.
 # this is a byproduct of finite-precision arithmetic.
+round(z1) # use this to actually make them 0s and 1s
 
 
 # solve a system of linear equations, X*b = y

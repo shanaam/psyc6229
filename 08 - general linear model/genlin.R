@@ -9,7 +9,7 @@ n <- 10   # number of samples
 # make up some data using the linear model:  y = X*beta + eps
 X <- matrix( rnorm(n*p), nrow=n )         # make up independent variables (X)
 beta <- matrix( rnorm(p), nrow=p )        # make up regression coefficients (beta)
-y <- X %*% beta + rnorm( n, sd=0.1 )      # compute dependent variables (y)
+y <- X %*% beta + rnorm( n, sd=0.1 )      # compute dependent variables (y), with some noise
 
 # now suppose we only have X and y.  we can solve the over-determined system
 # of linear equations to estimate beta.  we implicitly use a sum-of-squares
