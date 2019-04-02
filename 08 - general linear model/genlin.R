@@ -27,3 +27,22 @@ print( cbind( beta, betahat ) )           # check the solution
 # lm() also returns confidence intervals for the coefficients, and much more
 # information as well -- see ?lm and str( fit )
 cint <- confint( fit, level=0.95 )
+
+# note that even with the general linear model, we can model the dependent variable
+# as a nonlinear function of the independent variables.  we just add new independent
+# variables that are nonlinear functions of the initial independent variables.
+# for example, we can model y as a quadratic function of x, as follows.
+
+# make up some data
+x <- seq( -1, 1, length.out=10 )
+X <- cbind( rep( 1, length(x) ), x, x^2 )     # independent variables:  1, x, x^2
+beta <- c( 0.5, 1, 2 )                        # coefficients
+y <- X %*% beta + rnorm( length(x), sd=0.1 )  # dependent variables
+
+# find regression coefficients
+fit <- lm( y ~ X - 1 )
+betahat <- fit$coefficients
+
+# plot data and fitted curve
+plot( x, y, type='p', col='red' )
+curve( betahat[1] + betahat[2]*x + betahat[3]*x^2, col='green', xlim=c(-1,1), add=TRUE )
