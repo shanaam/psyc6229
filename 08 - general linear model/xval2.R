@@ -21,7 +21,8 @@ err1 <- xval( p=p, plist=plist, sigma=sigma, nsamp=nsamp )
 phat <- which.min( err1$logerrv )
 
 
-# part two.  repeat the cross validation test many times, to see how it performs on average
+# part two.  repeat the cross validation test many times, to see how well
+# it performs on average
 
 # set number of repetitions
 nrep <- 100
@@ -32,10 +33,10 @@ errv <- errt
 
 # make many cross validation runs
 for( i in 1:nrep ) {
-	print(sprintf('trial %d of %d',i,nrep))
-    r <- xval( p=p, plist=plist, sigma=sigma, nsamp=nsamp, plotit=FALSE )
-    errt[,i] <- r$logerrt
-    errv[,i] <- r$logerrv
+  print(sprintf('trial %d of %d',i,nrep))
+  r <- xval( p=p, plist=plist, sigma=sigma, nsamp=nsamp, plotit=FALSE )
+  errt[,i] <- r$logerrt
+  errv[,i] <- r$logerrv
 }
 
 # find mean training and validation error for each model

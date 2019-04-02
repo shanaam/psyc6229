@@ -14,9 +14,9 @@ z1 <- x %*% y
 z2 <- y %*% x  # not commutative
 
 # matrix inversion
-w <- solve( x )  # invert matrix x
-z1 <- w %*% x
-z2 <- x %*% w
+xinv <- solve( x )  # invert matrix x
+z1 <- xinv %*% x
+z2 <- x %*% xinv
 
 # in principle z1 and z2 should be the 3 x 3 identity matrix:
 # 

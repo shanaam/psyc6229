@@ -53,11 +53,11 @@ xval <- function( p=5, plist=1:(2*p), sigma=0.10, nsamp=50, plotit=TRUE ) {
 			fit <- lm( yt ~ Xt - 1 )
 			betahat <- fit$coefficients
 		    
-			# find sum of squares prediction error on training trials
+			# find mean squared prediction error on training trials
 			yhatt <- Xt %*% betahat
 			errt[i,b] <- mean( (yt-yhatt)^2 )
 			
-			# find sum of squares prediction error on validation trials
+			# find mean squared prediction error on validation trials
 			yhatv <- Xv %*% betahat
 			errv[i,b] <- mean( (yv-yhatv)^2 )
 		
