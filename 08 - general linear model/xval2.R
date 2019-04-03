@@ -8,7 +8,7 @@ source('xval1.R')
 # set simulation parameters
 p <- 5
 plist <- 1:(2*p)
-sigma <- .2
+sigma <- 0.2
 nsamp <- 50
 
 
@@ -28,7 +28,7 @@ phat <- which.min( err1$logerrv )
 nrep <- 100
 
 # initialize matrix for training and validation error
-errt <- matrix( NaN, nrow=length(plist), ncol=nrep )
+errt <- matrix( NA, nrow=length(plist), ncol=nrep )
 errv <- errt
 
 # make many cross validation runs
@@ -63,3 +63,4 @@ print(sprintf('chose a model in [p-1,p+1] on proportion %.2f of trials',pclose))
 
 # histogram chosen models
 # hist( pmin, breaks=seq(0.5,max(plist)+0.5), probability=TRUE )
+
