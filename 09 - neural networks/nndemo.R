@@ -7,7 +7,7 @@
 
 rm( list=ls() )
 
-# load MNIST data
+# load MNIST dataset
 load( 'mnist.Rdata' )
 
 # find data set size
@@ -38,10 +38,12 @@ nn$delta <- rep( list( NA ), nn$nlev )    # derivatives of error with respect to
 # initialize weights
 for( i in 1:(nn$nlev-1) ) {
     
-    # choose random weights
+    # assign random values
     nn$w[[i]] <- matrix( rnorm(nn$nnode[i]*nn$nnode[i+1]), nrow=nn$nnode[i+1] )
-    
+
     # normalize weights
+    # (this is not usually part of back propagation, but I find that it
+    #  improves performance in this problem)
     m <- sqrt( apply( nn$w[[i]]^2, 1, sum ) )
     nn$w[[i]] <- nn$w[[i]] / matrix( m, nrow=nrow(nn$w[[i]]), ncol=ncol(nn$w[[i]]) )
     
@@ -78,7 +80,7 @@ repeat {
         # adjust weights
         nn$w[[j]] <- nn$w[[j]] - k * nn$wp[[j]]
         
-        # normalize weights
+        # normalize weights (as noted above, not usually part of backpropagation)
         m <- sqrt( apply( nn$w[[j]]^2, 1, sum ) )
         nn$w[[j]] <- nn$w[[j]] / matrix( m, nrow=nrow(nn$w[[j]]), ncol=ncol(nn$w[[j]]) )
         
