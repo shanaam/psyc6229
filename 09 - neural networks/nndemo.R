@@ -96,8 +96,8 @@ repeat {
         nn <- fpass( nn, testi[,testf] )
 
         # check responses
-        responsek <- apply( nn$y[[nn$nlev]], 2, which.max )
-        correctk  <- apply( testo[,testf],   2, which.max )
+        responsek <- apply( nn$y[[nn$nlev]], 2, which.max ) - 1
+        correctk  <- apply( testo[,testf],   2, which.max ) - 1
         ii <- i %/% 10
         err[ ii ] <- mean( responsek != correctk )
         
