@@ -59,7 +59,7 @@ k <- 0.01
 # load forward and backward pass functions
 source( 'fbpass.R' )
 
-# do many training runs
+# train network via stochastic gradient descent
 err <- NA
 i <- 0
 repeat {
