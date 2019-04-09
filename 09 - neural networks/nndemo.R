@@ -8,7 +8,7 @@
 rm( list=ls() )
 
 # load MNIST dataset
-load( 'mnist.Rdata' )
+load( '09 - neural networks/mnist.Rdata' )
 
 # find data set size
 ntrain <- ncol( traini )
@@ -23,7 +23,7 @@ nn$nlev <- length( nn$nnode )  # number of layers
 
 # set activation function and its derivative
 nn$f  <- function( x ) pmax( x, 0 )
-nn$fp <- function( x ) as.double( x > 0 )
+nn$fp <- function( x ) as.double( x > 0 ) # derivative of the activation function, an easy one so explicitly stated instead of calculated
 
 # set error function
 nn$errfn <- function( o, y ) 0.5*sum( (y-o)^2 )
@@ -57,7 +57,7 @@ ktest <- 1000
 k <- 0.01
 
 # load forward and backward pass functions
-source( 'fbpass.R' )
+source( '09 - neural networks/fbpass.R' )
 
 # train network via stochastic gradient descent
 err <- NA

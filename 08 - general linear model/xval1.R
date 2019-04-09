@@ -21,6 +21,8 @@ xval <- function( p=5, plist=1:(2*p), sigma=0.20, nsamp=50, plotit=TRUE ) {
 		plot( x, y, type='o' )
 	}
 
+	# above this is what we would USUALLY get from actually running an experiment and recording data
+	
 	# divide the data into blocks; trial i belongs to block blocki(i)	
 	nblocks <- 10
 	blocki <- ( ( 0:(nsamp-1) ) %% nblocks ) + 1
@@ -54,12 +56,14 @@ xval <- function( p=5, plist=1:(2*p), sigma=0.20, nsamp=50, plotit=TRUE ) {
 			betahat <- fit$coefficients
 		    
 			# find mean squared prediction error on training trials
+			# this one part is usually not calculated, but here we are finding sum of squared errors for
+      # the actual training data (to plot). It should decrease as we increase the degree of the polynomial
 			yhatt <- Xt %*% betahat
 			errt[i,b] <- mean( (yt-yhatt)^2 )
 			
 			# find mean squared prediction error on validation trials
-			yhatv <- Xv %*% betahat
-			errv[i,b] <- mean( (yv-yhatv)^2 )
+			yhatv <- Xv %*% betahat # this generated predicted data
+			errv[i,b] <- mean( (yv-yhatv)^2 ) # sum of squared errors between the predicted and actual points
 		
 		}
 	

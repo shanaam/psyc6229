@@ -3,7 +3,7 @@
 rm( list=ls() )
 
 # load cross validation function
-source('xval1.R')
+source('08 - general linear model/xval1.R')
 
 # set simulation parameters
 p <- 5
@@ -62,5 +62,5 @@ pclose <- mean( pmin>=p-1 & pmin<=p+1 )
 print(sprintf('chose a model in [p-1,p+1] on proportion %.2f of trials',pclose))
 
 # histogram chosen models
-# hist( pmin, breaks=seq(0.5,max(plist)+0.5), probability=TRUE )
+hist( pmin, breaks=seq(0.5,max(plist)+0.5), probability=TRUE )
 

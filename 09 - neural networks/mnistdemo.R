@@ -3,7 +3,7 @@
 rm( list=ls() )
 
 # load MNIST dataset
-load( 'mnist.Rdata' )
+load( '09 - neural networks/mnist.Rdata' )
 
 # show some digits
 for( i in 1:100 ) {

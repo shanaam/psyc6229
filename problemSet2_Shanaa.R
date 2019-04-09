@@ -1,9 +1,3 @@
----
-title: "Problem Set 2"
-output: html_notebook
----
-
-```{r}
 # clear the workspace
 rm(list = ls())
 
@@ -37,11 +31,13 @@ makeBobDF <- function(stim1Depth, stim2Depth, depthCue){
                    'verdict' = NaN)
   
   # apply bob to each row and add a verdict column
+  # we say bob scores a 'Hit' when bob says the deeper stimulus is 1 when that is true
+  # when bob says the deeper stimulus is 2 when that is true, we say that is a 'Correct Rejection'
   df$bobResponse <- apply(df, 1, applyBob, depthCue = depthCue)
   df$verdict <- ifelse(df$bobResponse == 1 & 
-                                df$stim1Depth >= df$stim2Depth, 'H', 
-                              ifelse (df$bobResponse == 2 & 
-                                        df$stim1Depth >= df$stim2Depth, 'M', 
+                         df$stim1Depth >= df$stim2Depth, 'H', 
+                       ifelse (df$bobResponse == 2 & 
+                                 df$stim1Depth >= df$stim2Depth, 'M', 
                                ifelse(df$bobResponse == 1 & 
                                         df$stim1Depth < df$stim2Depth, 'FA', 
                                       'CR')))
@@ -55,8 +51,8 @@ disparityDF <- makeBobDF(stim1Depth = rep(seq(from = 10, to = 12, length.out = 1
                          depthCue = 'disparity')
 
 touchDF <- makeBobDF(stim1Depth = rep(seq(from = 10, to = 12, length.out = 10), each = 20),
-                         stim2Depth = 11,
-                         depthCue = 'touch')
+                     stim2Depth = 11,
+                     depthCue = 'touch')
 
 # obtain hit and false alarm rates
 disparity_verdicts <- table(disparityDF$verdict)
@@ -76,13 +72,13 @@ applyn1Closer <- function(stim1Depth, df)
 # form of the cdf
 cdf <- function(x, mu, sigma)
   pnorm( x, mu, sigma )
-  	
+
 findPhat <- function(stim1Depth, stim2Depth, depthCue, pinit){
   
   # create a dataframe where bob does a lot of trials of this task with disparity as the cue
   expDF <- makeBobDF(stim1Depth = stim1Depth,
-                           stim2Depth = stim2Depth,
-                           depthCue =  depthCue)
+                     stim2Depth = stim2Depth,
+                     depthCue =  depthCue)
   
   # intialize a dataframe where first column is the unique stim1s
   forEachDF <- data.frame('stim1Depth' = unique(expDF$stim1Depth),
@@ -100,16 +96,16 @@ findPhat <- function(stim1Depth, stim2Depth, depthCue, pinit){
   # a maximum likelihood objective function --> we will minimize this
   # we are looking for mu (p[1]) and sigma (p[2])
   obj <- function(p)
-  	-sum(log(dbinom(forEachDF$n1Closer, 
-  	                forEachDF$nTrials, 
-  	                cdf(forEachDF$stim1Depth, p[1], p[2]))))
+    -sum(log(dbinom(forEachDF$n1Closer, 
+                    forEachDF$nTrials, 
+                    cdf(forEachDF$stim1Depth, p[1], p[2]))))
   
   pinit <- pinit
   return (optim(pinit, obj)$par)
 }
 
 # set the stimulus depths and a plausibile pinit
-stim1Depth <- rep(seq(from = 1, to = 19, length.out = 100), each = 20)
+stim1Depth <- rep(seq(from = 0, to = 20, length.out = 100), each = 20)
 stim2Depth <- 10
 pinit <- c(10,3)
 
@@ -120,15 +116,11 @@ sigma_disparity <- findPhat(stim1Depth = stim1Depth,
                             pinit = pinit)[2] /sqrt(2)
 
 sigma_touch <- findPhat(stim1Depth = stim1Depth, 
-                            stim2Depth = stim2Depth, 
-                            depthCue = 'touch', 
-                            pinit = pinit)[2] /sqrt(2)
+                        stim2Depth = stim2Depth, 
+                        depthCue = 'touch', 
+                        pinit = pinit)[2] /sqrt(2)
 
 sigma_both <- findPhat(stim1Depth = stim1Depth, 
-                            stim2Depth = stim2Depth, 
-                            depthCue = 'both', 
-                            pinit = pinit)[2] /sqrt(2)
-
-
-```
-
+                       stim2Depth = stim2Depth, 
+                       depthCue = 'both', 
+                       pinit = pinit)[2] /sqrt(2)
