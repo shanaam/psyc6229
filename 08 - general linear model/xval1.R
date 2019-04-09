@@ -1,6 +1,6 @@
 # xval1.R  Illustrate model selection via cross validation
 
-xval <- function( p=5, plist=1:(2*p), sigma=0.10, nsamp=50, plotit=TRUE ) {
+xval <- function( p=5, plist=1:(2*p), sigma=0.20, nsamp=50, plotit=TRUE ) {
 
 	# make a model matrix with all independent variables
 	x <- seq(-10,10,length.out=nsamp)
