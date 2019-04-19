@@ -2,19 +2,168 @@
 title: "An introduction to Linear Mixed Models - by Shanaathanan Modchalingam"
 output: html_notebook
 ---
+```{r setup, include= FALSE}
+# clear the workspace
+rm(list=ls())
 
-# 1. Introducing Linear Mixed Models
+# ggplot
+library(ggplot2)
+library(lme4)
+```
 
-Say you have xxx...
+# Introducing linear  models
 
-## A case study on when it may be useful
 
-Introduce the example to be done in section 4 here.
+Say we are tasked with answering a question: Can musicians perform better than non-musicians when asked to execute complex movements that are unrelated to their musical training? To do so, we design a few complex movements and recruit 72 participants, half of whom are musicians, from 4 different schools to participate in our experiment. They execute these complex movements and we record how well they perform by assigning them a score for each movement; the higher the score, the better their performance. We then average the scores within each participant to determine their mean scores. Our resulting data may look like this: 
+```{r, echo= FALSE}
+# read in our dummy data (created by Shanaa)
+data <- read.csv('exampleData.csv')
 
-# 2. The math
+# set some columns to factors 
+data$training <- as.factor(data$training)
+data$school <- as.factor(data$school)
 
-## Try to explain (intuitively) why we do what we do
+# display the data
+data[sample(nrow(data), 10), ]
+```
 
-# 3. Implementation 
+We can see that for each participat, we record whether they have musical training (coded as 1 for trained and 0 for non-trained individuals in the 'training' column), which of the 4 schools they belong to (coded as 1, 2, 3 or 4 in the 'school' column), and their mean performance scores in our task (the 'score' column). How should we go about answering our question?
 
-# 4. An example
+Plotting the data, we see the following:
+```{r, echo=FALSE}
+# plot the data
+ggplot(data, aes(x=training, y=score)) + 
+  theme_minimal()+
+  geom_jitter(alpha = 0.5, size = 3, height = 0, width = 0.05) +
+  labs(y = "Performance score") + 
+  scale_x_discrete(labels = c('Untrained', 'Trained')) +
+  scale_y_continuous(limits = c(0,10))
+
+```
+
+Our question is a fairly simple one: we want to see whether our dependent variable (score) is affected by our indipendent variable (training) and in what way.  
+
+### The linear model  
+
+As with many things, a linear model is a good place to start when attempting to answer the question. Using this method, we are trying to formulate an equation which should predict the performance score for any indivdual, given their level of musical training. The linear model looks something like this:
+
+$$y_i = a + bx + \epsilon_i$$
+Here, $y$, the dependent variable, is given by a combination of an intercept, $a$, and a slope, $b$. Additionally, each $y_i$, that is, the score for each participant, is associated with its own error term, $\epsilon_i$, which is the difference between the score predicted by our formula when given the level of training, and the actual score of the participant; these are also sometimes termed _residuals_.  
+
+It should be noted here that the error term, $\epsilon$, represents a vector, with the same length as the vector of scores. In R, the lm() functions lets us estimate $a$, the intercept, and $b$, the slope. In the following formula, we are indicating that score is a function of training.
+```{r}
+lm_training <- lm(data$score ~ data$training)
+lm_training$coefficients
+```
+
+We see that given our baseline (note that we consider non-trained individuals to be the baseline), the intercept, that is, the expected performance scores with no musical training, is at 5.29 and having musical training improves the score by an average of 1.81. It is important to note that with most experiments, here we are attempting to determine the intercept (that is, the performance when individuals have no musical training), and the slope (the improvement in performance when individuals have musical training) for the population. We assume that for the population, there is a real, __fixed__ intercept and slope.
+
+If we wish to, we can also access the residuals, that is, $\epsilon$. We see how each participant differs from the values predicted by our formula.
+```{r}
+lm_training$residuals[1:10]
+```
+
+
+Adding a line with our paramaters to the above plot, we get the following plot. We see that our regression line represents the change in the means of our performance scores given musical training.
+
+```{r, echo=FALSE}
+# plot the data
+ggplot(data, aes(x=training, y=score)) + 
+  theme_minimal()+
+  geom_jitter(alpha = 0.5, size = 3, height = 0, width = 0.05) +
+  labs(y = "Performance score") + 
+  scale_x_discrete(labels = c('Untrained', 'Trained')) +
+  scale_y_continuous(limits = c(0,10)) +
+  stat_function(fun = function(x) 5.29 + 1.81 * x - 1.81)
+```
+
+Furthermore, to determine if training is of significant importance when it comes to performance scores on complex tasks, we can compare our previous model to a model which only takes into account the grand mean of the data:
+
+```{r}
+lm_mean <- lm(data$score ~ 1)
+```
+
+By comparing the two, we can see if taking into account training is important:
+```{r}
+anova(lm_mean, lm_training)
+```
+
+We see that including the training term in the model is in fact beneficial (at the 0.05 alpha level). It should be noted that that we have basically conducted a t-test: 
+```{r}
+t.test(data[data$training == 0, 'score'], data[data$training == 1, 'score'])
+```
+From this, we might conclude that having musical training does in fact improve performance in complex motor tasks when compared to having no musical training.
+
+
+### The linear mixed model
+
+So far, we conducted some statistical tests from which we determined that having musical training improves performance in complex motor tasks. However, there is one major issue in our analysis so far. One underlying assumption of many parametric tests is that our measures are random variables that are independent and identically distributed. That is, they come from the same underlying distribution (we will continue to assume ours do), and that they are independent of each other. 
+
+To be considered independent, the probability of the _score_ taking on any particular value for a participant must remain the same when we are given information about any other scores. That is, there must not be any correlations between scores at any level.
+
+We recruited our participants from 4 different schools, and when we show which school each participant belonged to, we can see that the performance of each individual is not independent of others. The school they belong to is predictive of their performance.  
+```{r, echo=FALSE}
+# plot the data here
+ggplot(data, aes(x=training, y=score, colour = school)) + 
+  theme_minimal()+
+  geom_jitter(alpha = 0.5, size = 3, height = 0, width = 0.05) +
+  labs(y = "Performance score") + 
+  scale_x_discrete(labels = c('Untrained', 'Trained')) + 
+  scale_y_continuous(limits = c(0,10))
+```
+
+### Random intercepts
+
+For example, we can see in the above graph that participants from school 3 (data points in blue) tend to have lower performance scores than those from school 2 (data points in green). Along with a __fixed__ intercept for the population, there may also exist certain intercepts for each school. That is, due to any number of reasons, participants from a particular school may have their own, slightly different, level of performance in complex motor tasks. Unlike the one fixed population intercept, these intercepts are themselves random variables, drawn from a normal distribution centered on the population intercept: we will call these __random__ intercepts. Not accounting for these random intercepts can lead to inflated tyle 1 errors when we are interpretting our analysis.   
+
+Linear mixed models allow us to incorporate these __random effects__ (in this case, the random intercept), along with our __fixed effects__ (in this case, the intercept and slope) into our model. That is, it is a model where the two types of effects are __mixed__. Adding our random intercept, our new formula becomes:
+$$y_i = a + a_s + bx + \epsilon_i$$
+Here, for any given $y_i$, $a_s$ is the intercept associated with the scool from which they are sampled.
+
+In R, we can use the lme4 package to easily work with linear mixed models. We will treat them very similar to linear models. Using the lmer() function (this stands for linear mixed effects regression), we can add in our random intercepts by writing them in parentheses in the format (1 | _random intercept_).
+```{r}
+lmer_training_int <- lmer(data$score ~ data$training + (1 | data$school))
+lmer_training_int
+```
+Our effects of interest from part one are given under the heading _Fixed Effects_. We see the incorporating the random intercepts does not change our conclusions. We can use the coef() function to examine our random intercepts; we see that each school does in fact have its own intercept.  
+```{r}
+coef(lmer_training_int)
+```
+
+### Random slopes
+
+There is another thing we may want to take into account when looking at our data. Not only can each school have a different baseline level of performance in our tasks, they may also have different changes in performance due to musical training (i.e., the slopes). Again much like before, these __random slopes__ are again assumed to be random variables sampled from a normal distribution. We add these random slopes to our linear mixed model formula like so: 
+$$y_i = a + a_s + (b + b_s) x + \epsilon_i$$
+Much like $a_s$, for any $y_i$, $b_s$ is determined by the school from which that particular participant is sampled.  
+
+In R, in our parenthases in the formula given to the lmer() function, where we added the random intercept of each school, we can also state that we want to take into account the random slopes given by each school. (1 + data\$training | data\$school) implies we want the model to include both the random intercept, as from the earlier formula, as well as the random slopes associated with data\$school.
+```{r}
+lmer_training_int_sl <- lmer(data$score ~ data$training + (1 + data$training | data$school))
+lmer_training_int_sl
+```
+
+We see that our fixed effects have not changed due to the inclusion of our random effect terms. Like before, we can examine our random effects using the coef() function.  
+```{r}
+coef(lmer_training_int_sl)
+```
+
+We see that indeed, each school has a different intercept and a different slope in our fitted model. This is not always the case, as if there is a lot of variance elsewhere in the model, the best fit will have one of the random effects with all the same value.  
+
+As with linear models, we can check for statistical significance by comparing our model to another model in which we do not include our fixed effect of interest.  
+```{r}
+lmer_reduced_int_sl <- lmer(data$score ~ (1 + data$training | data$school))
+anova(lmer_training_int_sl, lmer_reduced_int_sl)
+```
+We see that our model that includes musical training is still significantly better at predicting the data (a lower AIC and BIC indicate a better fit). Note that the p-value here is higher than the one we originally observed when using simple linear regression. By accounting for random effects due to the schools we sampled from, we are being more conservative when making our conclusions. We can still conclude however, taking into account random slopes and intercepts due to different schools, musical training does in fact improve performance on our complex movement task.  
+
+### Conclusion
+
+Linear mixed models are a great way of accounting for non-independence in the data. Although we used a simple example with one source of random effects, there may be many sources of random effects to consider. For example, we used a mean performance score for each individual. If we used a repeated-measures design where each individual performed multiple complex movements, each type of complex movement may also have random effects associated with them. To minimize type 1 errors, it is important consider possible random effects. Luckily, adding random effects to the model is as simple as adding another term in parentheses to the formula.  
+
+***
+
+For a great review and best-practice recommendations, see:  
+Singmann, H., & Kellen, D. (in press). An Introduction to Mixed Models for Experimental Psychology. In D. H. Spieler & E. Schumacher (Eds.), New Methods in Neuroscience and Cognitive Psychology. Psychology Press.  
+
+For a comparison between linear mixed models and repeated-measures ANOVAs see:  
+Crueger, C., & Tian, L. (2004). A Comparison of the General Linear Mixed Model and Repeated Measures ANOVA Using a Dataset with Multiple Missing Data Points. Biological Research for Nursing 6(2): 151-157.  
